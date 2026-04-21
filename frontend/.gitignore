@@ -14,10 +14,20 @@ yarn-debug.log*
 pnpm-debug.log*
 
 # Environment
+.env
+.env*.local
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.*
+
+# IDE and OS
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
 
 # Misc
 .DS_Store
