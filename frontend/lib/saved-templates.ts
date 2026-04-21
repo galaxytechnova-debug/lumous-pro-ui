@@ -4,78 +4,157 @@ export type SavedTemplate = {
   html: string;
   prompt: string;
   updatedAt: number;
+  createdAt?: number;
 };
 
-export const SAVED_TEMPLATES_STORAGE_KEY = "lumosui-saved-templates-v1";
-
-/** Fired in the active tab when templates are written (localStorage does not fire `storage` in the same tab). */
 export const SAVED_TEMPLATES_CHANGED_EVENT = "lumosui:saved-templates-changed";
+const TEMPLATES_API_URL = process.env.NEXT_PUBLIC_WAITLIST_API_URL?.replace(/\/$/, "") || "http://localhost:4000";
+const LEGACY_STORAGE_KEY = "lumosui-saved-templates-v1";
+const LEGACY_MIGRATION_DONE_KEY = "lumosui-saved-templates-migrated-v1";
+
+type TemplateListResponse = {
+  ok: boolean;
+  data?: SavedTemplate[];
+  message?: string;
+};
+
+type TemplateSingleResponse = {
+  ok: boolean;
+  data?: SavedTemplate;
+  message?: string;
+};
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null;
+}
+
+function isLegacyTemplate(v: unknown): v is {
+  name: string;
+  html: string;
+  prompt: string;
+} {
+  if (!isRecord(v)) return false;
+  return typeof v.name === "string" && typeof v.html === "string" && typeof v.prompt === "string";
+}
 
 function notifyTemplatesChanged(): void {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new CustomEvent(SAVED_TEMPLATES_CHANGED_EVENT));
 }
 
-function isRecord(v: unknown): v is Record<string, unknown> {
-  return typeof v === "object" && v !== null;
+async function parseErrorMessage(response: Response): Promise<string> {
+  const body = (await response.json().catch(() => null)) as { message?: string } | null;
+  return body?.message || "Failed to complete templates request.";
 }
 
-function isSavedTemplate(v: unknown): v is SavedTemplate {
-  if (!isRecord(v)) return false;
-  return (
-    typeof v.id === "string" &&
-    typeof v.name === "string" &&
-    typeof v.html === "string" &&
-    typeof v.prompt === "string" &&
-    typeof v.updatedAt === "number"
-  );
+async function templatesFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(`${TEMPLATES_API_URL}${path}`, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers || {}),
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(await parseErrorMessage(response));
+  }
+
+  return (await response.json()) as T;
 }
 
-export function loadTemplates(): SavedTemplate[] {
+function loadLegacyLocalTemplates(): Array<{ name: string; html: string; prompt: string }> {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem(SAVED_TEMPLATES_STORAGE_KEY);
+    const raw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter(isSavedTemplate);
+    return parsed.filter(isLegacyTemplate);
   } catch {
     return [];
   }
 }
 
-export function saveTemplatesAll(list: SavedTemplate[]): void {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(SAVED_TEMPLATES_STORAGE_KEY, JSON.stringify(list));
+async function migrateLegacyTemplatesIfNeeded(currentServerTemplates: SavedTemplate[]): Promise<SavedTemplate[] | null> {
+  if (typeof window === "undefined") return null;
+  if (currentServerTemplates.length > 0) {
+    window.localStorage.setItem(LEGACY_MIGRATION_DONE_KEY, "1");
+    return null;
+  }
+  if (window.localStorage.getItem(LEGACY_MIGRATION_DONE_KEY) === "1") return null;
+
+  const legacyTemplates = loadLegacyLocalTemplates();
+  if (legacyTemplates.length === 0) {
+    window.localStorage.setItem(LEGACY_MIGRATION_DONE_KEY, "1");
+    return null;
+  }
+
+  for (const item of legacyTemplates) {
+    await templatesFetch<TemplateSingleResponse>("/api/v1/templates", {
+      method: "POST",
+      body: JSON.stringify(item),
+    });
+  }
+
+  window.localStorage.setItem(LEGACY_MIGRATION_DONE_KEY, "1");
+  const refreshed = await templatesFetch<TemplateListResponse>("/api/v1/templates");
+  return refreshed.ok && Array.isArray(refreshed.data) ? refreshed.data : [];
+}
+
+export async function loadTemplates(): Promise<SavedTemplate[]> {
+  const result = await templatesFetch<TemplateListResponse>("/api/v1/templates");
+  if (!result.ok || !Array.isArray(result.data)) {
+    return [];
+  }
+  const migrated = await migrateLegacyTemplatesIfNeeded(result.data);
+  if (migrated) return migrated;
+  return result.data;
+}
+
+export async function upsertTemplate(entry: Omit<SavedTemplate, "id" | "updatedAt" | "createdAt">): Promise<SavedTemplate> {
+  const result = await templatesFetch<TemplateSingleResponse>("/api/v1/templates", {
+    method: "POST",
+    body: JSON.stringify({
+      name: entry.name.trim(),
+      html: entry.html,
+      prompt: entry.prompt,
+    }),
+  });
+
+  if (!result.ok || !result.data) {
+    throw new Error(result.message || "Failed to save template.");
+  }
+
+  notifyTemplatesChanged();
+  return result.data;
+}
+
+export async function getTemplateById(id: string): Promise<SavedTemplate | undefined> {
+  if (!id) return undefined;
+  try {
+    const result = await templatesFetch<TemplateSingleResponse>(`/api/v1/templates/${id}`);
+    if (!result.ok || !result.data) return undefined;
+    return result.data;
+  } catch {
+    return undefined;
+  }
+}
+
+export async function deleteTemplateById(id: string): Promise<void> {
+  if (!id) return;
+  await templatesFetch<{ ok: boolean; message?: string }>(`/api/v1/templates/${id}`, {
+    method: "DELETE",
+  });
   notifyTemplatesChanged();
 }
 
-export function upsertTemplate(entry: Omit<SavedTemplate, "id" | "updatedAt"> & { id?: string }): SavedTemplate {
-  const id = entry.id ?? crypto.randomUUID();
-  const record: SavedTemplate = {
-    id,
-    name: entry.name.trim(),
-    html: entry.html,
-    prompt: entry.prompt,
-    updatedAt: Date.now(),
-  };
-  const list = loadTemplates().filter((t) => t.id !== id);
-  saveTemplatesAll([record, ...list]);
-  return record;
-}
-
-export function getTemplateById(id: string): SavedTemplate | undefined {
-  return loadTemplates().find((t) => t.id === id);
-}
-
-export function deleteTemplateById(id: string): void {
-  const list = loadTemplates().filter((t) => t.id !== id);
-  saveTemplatesAll(list);
-}
-
-export function deleteTemplatesByIds(ids: string[]): void {
+export async function deleteTemplatesByIds(ids: string[]): Promise<void> {
   if (ids.length === 0) return;
-  const remove = new Set(ids);
-  const list = loadTemplates().filter((t) => !remove.has(t.id));
-  saveTemplatesAll(list);
+  await templatesFetch<{ ok: boolean; message?: string }>("/api/v1/templates/bulk-delete", {
+    method: "POST",
+    body: JSON.stringify({ ids }),
+  });
+  notifyTemplatesChanged();
 }

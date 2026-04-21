@@ -10,7 +10,7 @@ function getPathname(req) {
 }
 
 function shouldConnectForRequest(pathname) {
-  return pathname === "/health" || pathname.startsWith("/api/v1/waitlist");
+  return pathname === "/health" || pathname.startsWith("/api/v1/waitlist") || pathname.startsWith("/api/v1/templates");
 }
 
 module.exports = async function handler(req, res) {

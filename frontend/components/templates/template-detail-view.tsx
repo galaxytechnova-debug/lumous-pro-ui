@@ -13,7 +13,6 @@ import { TemplatePromptProGate } from "@/components/templates/template-prompt-pr
 import {
   getTemplateById,
   SAVED_TEMPLATES_CHANGED_EVENT,
-  SAVED_TEMPLATES_STORAGE_KEY,
   type SavedTemplate,
 } from "@/lib/saved-templates";
 import { ArrowLeft, Lock, Maximize2, Sparkles, X } from "lucide-react";
@@ -30,16 +29,14 @@ export function TemplateDetailView() {
       setTemplate(null);
       return;
     }
-    const refresh = () => setTemplate(getTemplateById(id) ?? null);
-    refresh();
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === SAVED_TEMPLATES_STORAGE_KEY) refresh();
+    const refresh = async () => {
+      const result = await getTemplateById(id);
+      setTemplate(result ?? null);
     };
-    const onLocalChange = () => refresh();
-    window.addEventListener("storage", onStorage);
+    void refresh();
+    const onLocalChange = () => void refresh();
     window.addEventListener(SAVED_TEMPLATES_CHANGED_EVENT, onLocalChange);
     return () => {
-      window.removeEventListener("storage", onStorage);
       window.removeEventListener(SAVED_TEMPLATES_CHANGED_EVENT, onLocalChange);
     };
   }, [id]);

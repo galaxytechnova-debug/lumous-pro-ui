@@ -37,4 +37,31 @@ function validateWaitlistPayload(payload) {
   };
 }
 
-module.exports = { validateWaitlistPayload };
+function validateTemplatePayload(payload) {
+  const name = normalizeString(payload?.name);
+  const html = typeof payload?.html === "string" ? payload.html : "";
+  const prompt = typeof payload?.prompt === "string" ? payload.prompt : "";
+
+  if (name.length < 2 || name.length > 120) {
+    return { valid: false, message: "Template name must be between 2 and 120 characters." };
+  }
+
+  if (html.trim().length < 10 || html.length > 100000) {
+    return { valid: false, message: "Template HTML must be between 10 and 100000 characters." };
+  }
+
+  if (prompt.length > 100000) {
+    return { valid: false, message: "Template prompt must be 100000 characters or less." };
+  }
+
+  return {
+    valid: true,
+    data: {
+      name,
+      html,
+      prompt,
+    },
+  };
+}
+
+module.exports = { validateWaitlistPayload, validateTemplatePayload };

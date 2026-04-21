@@ -5,10 +5,12 @@ const compression = require("compression");
 const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
 const waitlistRoutes = require("./routes/waitlist.routes");
+const templatesRoutes = require("./routes/templates.routes");
 const { getDatabaseHealth } = require("./config/db");
 const { notFoundHandler, errorHandler } = require("./middlewares/error-handler");
 
 const app = express();
+const JSON_BODY_LIMIT = process.env.JSON_BODY_LIMIT || "2mb";
 
 function resolveCorsOrigins() {
   const fromEnv = (process.env.FRONTEND_ORIGINS || "")
@@ -31,11 +33,11 @@ app.use(
       }
       return callback(new Error("Origin not allowed by CORS policy."));
     },
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST", "DELETE", "OPTIONS"],
     optionsSuccessStatus: 204,
   })
 );
-app.use(express.json({ limit: "10kb" }));
+app.use(express.json({ limit: JSON_BODY_LIMIT }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
 app.get("/", (req, res) => {
@@ -75,6 +77,7 @@ const waitlistLimiter = rateLimit({
 });
 
 app.use("/api/v1/waitlist", waitlistLimiter, waitlistRoutes);
+app.use("/api/v1/templates", waitlistLimiter, templatesRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 

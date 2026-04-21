@@ -30,6 +30,7 @@ export function TemplateNewEditor() {
   const [saving, setSaving] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [promptCopied, setPromptCopied] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     if (saveOpen) setFullscreen(false);
@@ -61,14 +62,17 @@ export function TemplateNewEditor() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const trimmed = name.trim();
     if (!trimmed) return;
     setSaving(true);
+    setSaveError(null);
     try {
-      upsertTemplate({ name: trimmed, html, prompt });
+      await upsertTemplate({ name: trimmed, html, prompt });
       setSaveOpen(false);
       router.push("/templates");
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "Failed to save template.");
     } finally {
       setSaving(false);
     }
@@ -252,9 +256,10 @@ export function TemplateNewEditor() {
               placeholder="e.g. Marketing hero"
               className="border-white/10 bg-black/30 text-white placeholder:text-zinc-600"
               onKeyDown={(e) => {
-                if (e.key === "Enter") handleSave();
+                if (e.key === "Enter") void handleSave();
               }}
             />
+            {saveError ? <p className="text-xs text-red-300">{saveError}</p> : null}
           </div>
           <DialogFooter className="gap-2 sm:gap-0">
             <Button type="button" variant="ghost" className="rounded-full text-zinc-400" onClick={() => setSaveOpen(false)}>
@@ -264,7 +269,7 @@ export function TemplateNewEditor() {
               type="button"
               disabled={!name.trim() || saving}
               className="rounded-full bg-violet-600 text-white hover:bg-violet-500"
-              onClick={handleSave}
+              onClick={() => void handleSave()}
             >
               {saving ? "Saving…" : "Save"}
             </Button>

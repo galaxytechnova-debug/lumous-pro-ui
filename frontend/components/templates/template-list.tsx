@@ -21,7 +21,6 @@ import {
   deleteTemplatesByIds,
   loadTemplates,
   SAVED_TEMPLATES_CHANGED_EVENT,
-  SAVED_TEMPLATES_STORAGE_KEY,
   type SavedTemplate,
 } from "@/lib/saved-templates";
 import {
@@ -38,15 +37,27 @@ export function TemplateList() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
   const [managerUnlocked, setManagerUnlocked] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const refresh = () => setTemplates(loadTemplates());
-    refresh();
+    const refresh = async () => {
+      try {
+        setErrorMessage(null);
+        const data = await loadTemplates();
+        setTemplates(data);
+      } catch (error) {
+        setErrorMessage(error instanceof Error ? error.message : "Failed to load templates.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    void refresh();
+
     const onStorage = (e: StorageEvent) => {
-      if (e.key === SAVED_TEMPLATES_STORAGE_KEY) refresh();
       if (e.key === TEMPLATES_GATE_STORAGE_KEY) setManagerUnlocked(isTemplatesGateUnlocked());
     };
-    const onLocalChange = () => refresh();
+    const onLocalChange = () => void refresh();
     window.addEventListener("storage", onStorage);
     window.addEventListener(SAVED_TEMPLATES_CHANGED_EVENT, onLocalChange);
     return () => {
@@ -102,11 +113,15 @@ export function TemplateList() {
     setSelectedIds(new Set());
   };
 
-  const handleBulkDelete = () => {
-    deleteTemplatesByIds(Array.from(selectedIds));
-    setSelectedIds(new Set());
-    setBulkDeleteOpen(false);
-    setSelectionMode(false);
+  const handleBulkDelete = async () => {
+    try {
+      await deleteTemplatesByIds(Array.from(selectedIds));
+      setSelectedIds(new Set());
+      setBulkDeleteOpen(false);
+      setSelectionMode(false);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Failed to delete templates.");
+    }
   };
 
   const deleteSummary =
@@ -172,9 +187,17 @@ export function TemplateList() {
           ) : null}
         </div>
 
-        {templates.length === 0 ? (
+        {loading ? (
           <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-6 py-16 text-center">
-            <p className="text-sm text-zinc-400">No templates yet. Add one to see it here with a live thumbnail.</p>
+            <p className="text-sm text-zinc-400">Loading templates...</p>
+          </div>
+        ) : errorMessage ? (
+          <div className="rounded-2xl border border-red-500/20 bg-red-500/5 px-6 py-8 text-center">
+            <p className="text-sm text-red-200">{errorMessage}</p>
+          </div>
+        ) : templates.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-6 py-16 text-center">
+            <p className="text-sm text-zinc-400">No templates yet.</p>
             {managerUnlocked ? (
               <Button asChild className="mt-6 rounded-full" variant="outline">
                 <Link href="/templates/new">Create your first template</Link>
@@ -276,6 +299,7 @@ export function TemplateList() {
                 <p className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 font-medium text-zinc-200">
                   {deleteSummary}
                 </p>
+                <p>This removes templates for all users.</p>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
