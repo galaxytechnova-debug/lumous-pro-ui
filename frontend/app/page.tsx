@@ -8,7 +8,6 @@ import { ParallaxScrollSection } from "@/components/home/parallax-scroll-section
 import { FeatureSpotlightCards } from "@/components/home/feature-spotlight-cards";
 import { IntegrationsSection } from "@/components/home/integrations-section";
 import { ComponentShowcase } from "@/components/home/component-showcase";
-import { PlatformHighlightsSection } from "@/components/home/platform-highlights-section";
 import { PricingSection } from "@/components/home/pricing-section";
 import { FaqSection } from "@/components/home/faq-section";
 import { getComponentCounts } from "@/lib/site-metrics";
@@ -28,7 +27,6 @@ export default function HomePage() {
         <FeatureSpotlightCards />
         <IntegrationsSection />
         <ComponentShowcase />
-        <PlatformHighlightsSection totalComponents={total} freeComponents={free} proComponents={pro} />
         <PricingSection totalComponents={total} freeComponents={free} />
         <FaqSection />
       </main>
