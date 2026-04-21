@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Environment variables
+.env
+
+# Build (if using TS)
+dist/
+build/
+
+# TypeScript
+*.tsbuildinfo
+
+# Coverage
+coverage/
+
+# Misc
+.DS_Store
+
+# Debug
+*.tgz
+
+# Optional MongoDB local files (if any)
+*.db
+*.sqlite
