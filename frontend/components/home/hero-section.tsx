@@ -108,9 +108,7 @@ export function HeroSection({ totalComponents, freeComponents }: HeroSectionProp
             transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
             className="mx-auto mt-5 max-w-2xl text-pretty text-base text-zinc-400 md:text-lg"
           >
-            Production-ready animated UI blocks for Next.js—copy, paste, and launch landing pages with
-            depth, glass, and motion already tuned. The gallery ships {totalComponents} components today (
-            {freeComponents} free, the rest Pro-gated until you have access).
+            Production-ready animated UI blocks for Next.js—build stunning landing pages with glass, motion, and depth in minutes. Generate full frontend websites with powerful prompts and advanced component blocks.
           </motion.p>
           <motion.div
             initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}

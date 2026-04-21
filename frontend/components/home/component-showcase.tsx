@@ -132,7 +132,7 @@ export function ComponentShowcase() {
             <Button
               size="lg"
               variant="outline"
-              className="rounded-xl border-white/15 bg-white/[0.03] text-white hover:border-violet-400/40 hover:bg-white/[0.06]"
+              className="rounded-xl border-white/15 bg-white/[0.03] text-white hover:border-violet-400/40 hover:bg-white/[0.06] hover:text-white"
             >
               View all components
               <ArrowRight className="ml-2 w-4 h-4" />
