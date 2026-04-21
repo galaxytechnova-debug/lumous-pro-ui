@@ -1,36 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { templatesGatePasswordMatches, unlockTemplatesGate } from "@/lib/templates-gate";
 
 export function Footer() {
-  const [gateOpen, setGateOpen] = useState(false);
-  const [gatePassword, setGatePassword] = useState("");
-  const [gateError, setGateError] = useState("");
-
-  const submitGate = () => {
-    if (templatesGatePasswordMatches(gatePassword)) {
-      unlockTemplatesGate();
-      setGatePassword("");
-      setGateError("");
-      setGateOpen(false);
-    } else {
-      setGateError("Incorrect password.");
-    }
-  };
-
   return (
     <footer className="border-t border-white/[0.06] bg-[#030308]">
       <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
@@ -69,20 +42,10 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 text-sm text-zinc-500 md:mt-12 md:flex-row">
           <p className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
-            <button
-              type="button"
-              aria-label="Open access code"
-              onClick={() => {
-                setGateError("");
-                setGateOpen(true);
-              }}
-              className="inline-flex h-8 w-8 shrink-0 !cursor-default items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-sm text-zinc-400 focus:outline-none"
-            >
+            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-sm text-zinc-400">
               ©
-            </button>
-            <span>
-              {new Date().getFullYear()} LumosUI. All rights reserved.
             </span>
+            <span>{new Date().getFullYear()} LumosUI. All rights reserved.</span>
           </p>
           <div className="flex gap-8">
             <Link href="/privacy" className="transition hover:text-white">
@@ -94,47 +57,6 @@ export function Footer() {
           </div>
         </div>
       </div>
-
-      <Dialog
-        open={gateOpen}
-        onOpenChange={(open) => {
-          setGateOpen(open);
-          if (!open) {
-            setGatePassword("");
-            setGateError("");
-          }
-        }}
-      >
-        <DialogContent className="border-white/10 bg-zinc-950 text-white sm:max-w-md">
-          <DialogHeader>        
-          </DialogHeader>
-          <div className="grid gap-2 py-2">
-            <Input
-              id="templates-gate-password"
-              type="password"
-              autoComplete="off"
-              value={gatePassword}
-              onChange={(e) => {
-                setGatePassword(e.target.value);
-                setGateError("");
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") submitGate();
-              }}
-              className="border-white/10 bg-black/40 text-white placeholder:text-zinc-600"
-            />
-            {gateError ? <p className="text-xs text-red-400">{gateError}</p> : null}
-          </div>
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button type="button" variant="ghost" className="rounded-full text-zinc-400" onClick={() => setGateOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="button" className="rounded-full bg-violet-600 text-white hover:bg-violet-500" onClick={submitGate}>
-              Unlock
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </footer>
   );
 }

@@ -1,0 +1,78 @@
+Developer Portfolio Landing Page — Terminal/Hacker
+Aesthetic
+
+CATEGORY
+
+Personal Portfolio / Developer
+
+DESIGN STYLE
+
+Terminal green-on-black, monospace typography, CRT scaniines, blinking cursors, command-ine Ul
+elements
+
+Overview
+
+Build an atmospheric developer portfolio landing page for ‘Alex Chen — Full Stack Engineer’. The
+design mimics a terminal/command-ine interface with a pure black background (¥0D0DOD), phosphor
+green (#00FF41) as the primary accent, and JetBrains Mono for all text. The hero renders as a fake
+
+terminal with commands being typed. Sections appear as if printed by a command. CRT scanline effect
+applied as a CSS pseudo-element. No images — all visuals are ASCII art, ASCII borders, and
+monospace Ul elements. The effect should feel like you've SSHd into a hacker's personal server.
+Design Tokens
+Background #0DODOD — Near-black terminal
+Primary Text #EBEBES — Soft white
+Accent Green #00FF41 — Phosphor green for prompts, highlights
+Dim Green #006614 — Dimmed, for less important terminal output
+Warning #FFD700 — Yellow for caution/alerts
+Error #FF4444 — Red for error output
+Typography JetBrains Mono ONLY — 14px base, no decorative fonts
+Radius Opx everywhere
+CRT Effect Scanlines via repeating-linear-gradient pseudo-element
+Page Sections
+1. Boot Sequence Intro (Skip-able)
+~ On first load: 2-second boot sequence animation — green text lines print rapidly: BIOS v2.4.1 ... Loading
+kemel .. Mounting filesystem _."
+
+— Framer Motion staggered line reveals, 50ms between each
+
+~ "SKIP INTRO button appears after 0.55 — pressing it Framer Motion exit animations to main page
+
+2. Terminal Hero
+~ Fake terminal window with title bar showing three circles (red/yellow/green) and path ~/portiolio
+
+~ Command prompt: alex@portiolio:~$ followed by animated typewriter revealing Whoami’
+
+~ Output prints below: ASCII art of name + role + location
+
+— Next prompt types Is skills" and outputs a grid of technologies.
+
+— Blinking cursor CSS animation: opacity 01-0 at 1s interval
+~~ — Scrolldown indicator green : blinkingarrow
+
+3. Projects — as ‘Is -la’ output
+— Section header: alex@portiolio-~$ Is -la projects! printed with typewriter
+— Each project as a file listing row: permissions + size + date + project-name.md
+— Clicking a project: expands inline as if cat project md — shows description, tech stack, links
+— Framer Motion AnimatePresence for the expandicollapse
+4. Skills — ASCII Progress Bars
+— Each skill: Reacts (I 1 85% — pure ASCII progress bars.
+— Framer Motion animates the fill on scroll entry: empty — filled, 1s duration each, staggered
+— Categories: Frontend / Backend / DevOps / Tools — each section preceded by a comment line '#
+Frontend’
+5. Work History — as log file
+— Title: ‘experience log’
+
+— Each job entry formatted as log output with timestamps: [2022-03-01 09:00:00] START JOB: Senior
+Engineer at Acme Corp
+— Details as indented log lines
+6. Contact — Interactive Terminal
+— Actual input field styled as terminal prompt: alex@portfolio-~$ send-message
+— User types name, email, message as prompted — one field at a time
+~ On submit: ‘Message sent. / Transmission complete."
+— Framer Motion: each input fades in as previous is completed
+Animations
+— Alltext: typewriter character-by-character reveal using setTimeout
+~ Cursor: CSS animation blink at 1s interval
+— Section reveals: Framer Motion whilelnView opacity 0 1, no movement (terminal lines just appear)
+— ASCII progress bars: Framer Motion animate width percentage   

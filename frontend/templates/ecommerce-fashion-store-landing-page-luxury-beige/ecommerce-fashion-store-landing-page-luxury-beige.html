@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Fashion Store Landing Page — Luxury Beige</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        alabaster: '#F9F8F6',
+                        charcoal: '#1A1A1A',
+                        taupe: '#EBE5DE',
+                        warmgrey: '#6C6863',
+                        gold: '#D4AF37',
+                    },
+                    fontFamily: {
+                        playfair: ['Playfair Display', 'serif'],
+                        inter: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #F9F8F6;
+            color: #1A1A1A;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Grayscale to color transition */
+        .grayscale-hover {
+            filter: grayscale(100%);
+            transition: filter 1.5s ease-out;
+        }
+        
+        .grayscale-hover:hover,
+        .group:hover .grayscale-hover {
+            filter: grayscale(0%);
+        }
+        
+        /* Hero image stays grayscale */
+        .hero-image {
+            filter: grayscale(100%);
+        }
+        
+        /* Gold underline animation */
+        .gold-underline {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .gold-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #1A1A1A;
+            transition: background-color 0.5s ease-out;
+        }
+        
+        .gold-underline:hover::after {
+            background-color: #D4AF37;
+        }
+        
+        /* Navigation hover */
+        .nav-link {
+            transition: color 0.5s ease-out;
+        }
+        
+        .nav-link:hover {
+            color: #D4AF37;
+        }
+        
+        /* Vertical text for brand story */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            transform: rotate(-30deg);
+            transform-origin: center;
+        }
+        
+        /* Masonry layout */
+        .masonry {
+            columns: 3;
+            column-gap: 1rem;
+        }
+        
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+        }
+        
+        /* Lookbook hover dim effect */
+        .lookbook-container:hover .lookbook-item:not(:hover) {
+            opacity: 0.5;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        /* Testimonial card hover */
+        .testimonial-card {
+            border-left: 4px solid transparent;
+            transition: border-color 0.3s ease-out;
+        }
+        
+        .testimonial-card:hover {
+            border-left-color: #D4AF37;
+        }
+        
+        .testimonial-card .avatar {
+            filter: grayscale(100%);
+            transition: filter 1.5s ease-out;
+        }
+        
+        .testimonial-card:hover .avatar {
+            filter: grayscale(0%);
+        }
+        
+        .testimonial-card .stars {
+            transition: transform 0.3s ease-out;
+        }
+        
+        .testimonial-card:hover .stars {
+            transform: scale(1.1);
+        }
+        
+        /* Button gold slide effect */
+        .btn-gold-slide {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-gold-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: #D4AF37;
+            transition: left 0.4s ease-out;
+            z-index: -1;
+        }
+        
+        .btn-gold-slide:hover::before {
+            left: 0;
+        }
+        
+        .btn-gold-slide:hover {
+            color: #1A1A1A;
+        }
+        
+        /* Product card hover */
+        .product-card {
+            transition: box-shadow 0.5s ease-out;
+        }
+        
+        .product-card:hover {
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .product-card .product-image {
+            filter: grayscale(100%);
+            transition: filter 1.5s ease-out;
+        }
+        
+        .product-card:hover .product-image {
+            filter: grayscale(0%);
+        }
+        
+        .product-card .gold-border-bottom {
+            height: 2px;
+            background-color: transparent;
+            transition: background-color 0.5s ease-out;
+        }
+        
+        .product-card:hover .gold-border-bottom {
+            background-color: #D4AF37;
+        }
+        
+        /* Input styling */
+        .minimal-input {
+            border: none;
+            border-bottom: 1px solid #1A1A1A;
+            background: transparent;
+            padding: 12px 0;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        
+        .minimal-input:focus {
+            border-bottom-color: #D4AF37;
+        }
+        
+        .minimal-input::placeholder {
+            color: #6C6863;
+        }
+        
+        /* Scroll reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Hero animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .hero-image-animate {
+            animation: slideInLeft 1s ease-out forwards;
+        }
+        
+        .hero-content-animate {
+            animation: slideInRight 1s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+        
+        /* Clip path reveal */
+        .clip-reveal {
+            clip-path: inset(100% 0 0 0);
+            transition: clip-path 1.2s ease-out;
+        }
+        
+        .clip-reveal.active {
+            clip-path: inset(0 0 0 0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-alabaster/95 backdrop-blur-sm border-b border-charcoal/10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="font-mono text-sm tracking-[0.3em] uppercase text-charcoal">
+                    Maison Eclat
+                </div>
+                
+                <!-- Center Nav -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#women" class="nav-link text-sm font-medium text-charcoal">Women</a>
+                    <a href="#men" class="nav-link text-sm font-medium text-charcoal">Men</a>
+                    <a href="#collections" class="nav-link text-sm font-medium text-charcoal">Collections</a>
+                    <a href="#about" class="nav-link text-sm font-medium text-charcoal">About</a>
+                </div>
+                
+                <!-- Right Icons -->
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 hover:text-gold transition-colors duration-500">
+                        <i data-lucide="search" class="w-5 h-5 stroke-[1.5]"></i>
+                    </button>
+                    <button class="p-2 hover:text-gold transition-colors duration-500 relative">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 stroke-[1.5]"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-charcoal text-alabaster text-[10px] rounded-full flex items-center justify-center font-mono">3</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen pt-16">
+        <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[calc(100vh-64px)]">
+            <!-- 7-col Image -->
+            <div class="lg:col-span-7 relative overflow-hidden">
+                <div class="hero-image-animate h-full">
+                    <img 
+                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80" 
+                        alt="Fashion Editorial" 
+                        class="hero-image w-full h-full object-cover"
+                        style="aspect-ratio: 3/4;"
+                    >
+                    <div class="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.15)]"></div>
+                </div>
+            </div>
+            
+            <!-- 5-col Content -->
+            <div class="lg:col-span-5 flex flex-col justify-end p-8 lg:p-12 lg:pb-24">
+                <div class="hero-content-animate max-w-md">
+                    <p class="text-xs font-mono uppercase tracking-[0.3em] text-gold mb-4">New Collection</p>
+                    <h1 class="font-playfair text-5xl lg:text-7xl leading-[0.9] text-charcoal mb-6">
+                        The Art of Wearing Nothing Extra
+                    </h1>
+                    <p class="text-lg text-warmgrey leading-relaxed mb-8 max-w-sm">
+                        Timeless silhouettes crafted from the finest fabrics. Each piece tells a story of understated elegance.
+                    </p>
+                    <a href="#collection" class="gold-underline text-sm font-medium uppercase tracking-wider pb-1">
+                        Explore Collection —
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="collection" class="py-24 px-6 lg:px-12 max-w-7xl mx-auto">
+        <div class="mb-16 reveal">
+            <p class="text-xs font-mono uppercase tracking-[0.3em] text-gold mb-4">The Collection</p>
+            <h2 class="font-playfair text-4xl lg:text-5xl text-charcoal">Featured Pieces</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Product 1 -->
+            <div class="product-card group cursor-pointer reveal">
+                <div class="relative overflow-hidden mb-4">
+                    <img 
+                        src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80" 
+                        alt="Silk Evening Gown" 
+                        class="product-image w-full aspect-[3/4] object-cover"
+                    >
+                </div>
+                <div class="gold-border-bottom mb-3"></div>
+                <h3 class="font-playfair text-xl text-charcoal mb-2">Silk Evening Gown</h3>
+                <p class="font-mono text-sm text-warmgrey mb-3">$2,850</p>
+                <a href="#" class="text-sm font-medium text-charcoal hover:text-gold transition-colors duration-500">
+                    Add to Cart
+                </a>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="product-card group cursor-pointer reveal">
+                <div class="relative overflow-hidden mb-4">
+                    <img 
+                        src="https://images.unsplash.com/photo-1558171813-4c088753af8f?w=600&q=80" 
+                        alt="Cashmere Overcoat" 
+                        class="product-image w-full aspect-[3/4] object-cover"
+                    >
+                </div>
+                <div class="gold-border-bottom mb-3"></div>
+                <h3 class="font-playfair text-xl text-charcoal mb-2">Cashmere Overcoat</h3>
+                <p class="font-mono text-sm text-warmgrey mb-3">$4,200</p>
+                <a href="#" class="text-sm font-medium text-charcoal hover:text-gold transition-colors duration-500">
+                    Add to Cart
+                </a>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="product-card group cursor-pointer reveal">
+                <div class="relative overflow-hidden mb-4">
+                    <img 
+                        src="https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=600&q=80" 
+                        alt="Tailored Blazer" 
+                        class="product-image w-full aspect-[3/4] object-cover"
+                    >
+                </div>
+                <div class="gold-border-bottom mb-3"></div>
+                <h3 class="font-playfair text-xl text-charcoal mb-2">Tailored Blazer</h3>
+                <p class="font-mono text-sm text-warmgrey mb-3">$1,680</p>
+                <a href="#" class="text-sm font-medium text-charcoal hover:text-gold transition-colors duration-500">
+                    Add to Cart
+                </a>
+            </div>
+            
+            <!-- Product 4 -->
+            <div class="product-card group cursor-pointer reveal">
+                <div class="relative overflow-hidden mb-4">
+                    <img 
+                        src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=600&q=80" 
+                        alt="Pleated Trousers" 
+                        class="product-image w-full aspect-[3/4] object-cover"
+                    >
+                </div>
+                <div class="gold-border-bottom mb-3"></div>
+                <h3 class="font-playfair text-xl text-charcoal mb-2">Pleated Trousers</h3>
+                <p class="font-mono text-sm text-warmgrey mb-3">$980</p>
+                <a href="#" class="text-sm font-medium text-charcoal hover:text-gold transition-colors duration-500">
+                    Add to Cart
+                </a>
+            </div>
+            
+            <!-- Product 5 -->
+            <div class="product-card group cursor-pointer reveal">
+                <div class="relative overflow-hidden mb-4">
+                    <img 
+                        src="https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&q=80" 
+                        alt="Structured Handbag" 
+                        class="product-image w-full aspect-[3/4] object-cover"
+                    >
+                </div>
+                <div class="gold-border-bottom mb-3"></div>
+                <h3 class="font-playfair text-xl text-charcoal mb-2">Structured Handbag</h3>
+                <p class="font-mono text-sm text-warmgrey mb-3">$3,400</p>
+                <a href="#" class="text-sm font-medium text-charcoal hover:text-gold transition-colors duration-500">
+                    Add to Cart
+                </a>
+            </div>
+            
+            <!-- Product 6 -->
+            <div class="product-card group cursor-pointer reveal">
+                <div class="relative overflow-hidden mb-4">
+                    <img 
+                        src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&q=80" 
+                        alt="Leather Boots" 
+                        class="product-image w-full aspect-[3/4] object-cover"
+                    >
+                </div>
+                <div class="gold-border-bottom mb-3"></div>
+                <h3 class="font-playfair text-xl text-charcoal mb-2">Leather Boots</h3>
+                <p class="font-mono text-sm text-warmgrey mb-3">$1,250</p>
+                <a href="#" class="text-sm font-medium text-charcoal hover:text-gold transition-colors duration-500">
+                    Add to Cart
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story - Dark Section -->
+    <section id="about" class="bg-charcoal text-alabaster py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <!-- Vertical Label -->
+            <div class="absolute left-6 lg:left-12 top-1/2 -translate-y-1/2 hidden lg:block">
+                <span class="vertical-text font-mono text-xs tracking-[0.3em] uppercase text-gold/50">
+                    Our Story
+                </span>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 lg:pl-24">
+                <!-- Left: Quote -->
+                <div class="clip-reveal">
+                    <p class="font-playfair italic text-4xl lg:text-5xl leading-tight text-alabaster">
+                        "Elegance is when the inside is as beautiful as the outside."
+                    </p>
+                    <p class="font-mono text-sm text-gold mt-6 tracking-wider">— Coco Chanel</p>
+                </div>
+                
+                <!-- Right: Body + Decorative Line -->
+                <div class="relative clip-reveal" style="transition-delay: 0.2s;">
+                    <div class="absolute left-0 top-0 bottom-0 w-px bg-gold/30"></div>
+                    <div class="pl-8">
+                        <p class="text-lg text-alabaster/80 leading-relaxed mb-6">
+                            Founded in Paris in 2015, Maison Eclat emerged from a singular vision: to create clothing that speaks in whispers rather than shouts. Our atelier on Rue Saint-Honoré continues a tradition of uncompromising craftsmanship.
+                        </p>
+                        <p class="text-lg text-alabaster/80 leading-relaxed mb-6">
+                            Each garment requires over 40 hours of meticulous handwork. We source fabrics from heritage mills in Italy and Japan, working exclusively with natural fibers that age beautifully.
+                        </p>
+                        <p class="text-warmgrey">
+                            Our commitment to slow fashion means producing only what is needed, when it is needed.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lookbook - Masonry Grid -->
+    <section class="py-24 px-6 lg:px-12 max-w-7xl mx-auto">
+        <div class="mb-16 reveal">
+            <p class="text-xs font-mono uppercase tracking-[0.3em] text-gold mb-4">Visual Diary</p>
+            <h2 class="font-playfair text-4xl lg:text-5xl text-charcoal">The Lookbook</h2>
+        </div>
+        
+        <div class="masonry lookbook-container">
+            <div class="masonry-item lookbook-item reveal">
+                <img 
+                    src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80" 
+                    alt="Look 1" 
+                    class="grayscale-hover w-full object-cover cursor-pointer"
+                >
+            </div>
+            <div class="masonry-item lookbook-item reveal">
+                <img 
+                    src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80" 
+                    alt="Look 2" 
+                    class="grayscale-hover w-full object-cover cursor-pointer"
+                >
+            </div>
+            <div class="masonry-item lookbook-item reveal">
+                <img 
+                    src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80" 
+                    alt="Look 3" 
+                    class="grayscale-hover w-full object-cover cursor-pointer"
+                >
+            </div>
+            <div class="masonry-item lookbook-item reveal">
+                <img 
+                    src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80" 
+                    alt="Look 4" 
+                    class="grayscale-hover w-full object-cover cursor-pointer"
+                >
+            </div>
+            <div class="masonry-item lookbook-item reveal">
+                <img 
+                    src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80" 
+                    alt="Look 5" 
+                    class="grayscale-hover w-full object-cover cursor-pointer"
+                >
+            </div>
+            <div class="masonry-item lookbook-item reveal">
+                <img 
+                    src="https://images.unsplash.com/photo-1475180429745-b937764fc902?w=600&q=80" 
+                    alt="Look 6" 
+                    class="grayscale-hover w-full object-cover cursor-pointer"
+                >
+            </div>
+            <div class="masonry-item lookbook-item reveal">
+                <img 
+                    src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&q=80" 
+                    alt="Look 7" 
+                    class="grayscale-hover w-full object-cover cursor-pointer"
+                >
+            </div>
+            <div class="masonry-item lookbook-item reveal">
+                <img 
+                    src="https://images.unsplash.com/photo-1548624149-f321c7e5b42c?w=600&q=80" 
+                    alt="Look 8" 
+                    class="grayscale-hover w-full object-cover cursor-pointer"
+                >
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-24 bg-taupe/30">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-16 reveal">
+                <p class="text-xs font-mono uppercase tracking-[0.3em] text-gold mb-4">Clientele</p>
+                <h2 class="font-playfair text-4xl lg:text-5xl text-charcoal">Words of Distinction</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card bg-alabaster p-8 reveal">
+                    <div class="flex items-center mb-4">
+                        <div class="stars flex text-gold mr-4">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        </div>
+                    </div>
+                    <p class="font-playfair italic text-xl text-charcoal mb-6">
+                        "The attention to detail is extraordinary. My tailored pieces have become heirlooms."
+                    </p>
+                    <div class="flex items-center">
+                        <img 
+                            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" 
+                            alt="Eleanor Whitmore" 
+                            class="avatar w-12 h-12 rounded-full object-cover mr-4"
+                        >
+                        <div>
+                            <p class="font-medium text-charcoal">Eleanor Whitmore</p>
+                            <p class="font-mono text-xs text-warmgrey">Art Collector, London</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card bg-alabaster p-8 reveal" style="transition-delay: 0.1s;">
+                    <div class="flex items-center mb-4">
+                        <div class="stars flex text-gold mr-4">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        </div>
+                    </div>
+                    <p class="font-playfair italic text-xl text-charcoal mb-6">
+                        "I've never experienced such personal service. They understand true luxury."
+                    </p>
+                    <div class="flex items-center">
+                        <img 
+                            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" 
+                            alt="Sebastian Chen" 
+                            class="avatar w-12 h-12 rounded-full object-cover mr-4"
+                        >
+                        <div>
+                            <p class="font-medium text-charcoal">Sebastian Chen</p>
+                            <p class="font-mono text-xs text-warmgrey">Architect, Singapore</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card bg-alabaster p-8 reveal" style="transition-delay: 0.2s;">
+                    <div class="flex items-center mb-4">
+                        <div class="stars flex text-gold mr-4">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        </div>
+                    </div>
+                    <p class="font-playfair italic text-xl text-charcoal mb-6">
+                        "Maison Eclat defines what modern elegance should be. Absolutely timeless."
+                    </p>
+                    <div class="flex items-center">
+                        <img 
+                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" 
+                            alt="Isabella Romano" 
+                            class="avatar w-12 h-12 rounded-full object-cover mr-4"
+                        >
+                        <div>
+                            <p class="font-medium text-charcoal">Isabella Romano</p>
+                            <p class="font-mono text-xs text-warmgrey">Editor, Milan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter CTA -->
+    <section class="py-24 px-6 lg:px-12 max-w-7xl mx-auto">
+        <div class="text-center max-w-xl mx-auto reveal">
+            <h2 class="font-playfair text-4xl lg:text-5xl text-charcoal mb-4">Join the Inner Circle</h2>
+            <p class="text-warmgrey mb-10">
+                Be the first to discover new collections, exclusive previews, and private events.
+            </p>
+            
+            <form class="flex flex-col sm:flex-row gap-4 items-end">
+                <input 
+                    type="email" 
+                    placeholder="Your email address..." 
+                    class="minimal-input flex-1 w-full"
+                    required
+                >
+                <button 
+                    type="submit" 
+                    class="btn-gold-slide bg-charcoal text-alabaster px-8 py-3 font-medium text-sm tracking-wider uppercase transition-colors duration-400"
+                >
+                    Subscribe
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-charcoal/10 py-12 px-6 lg:px-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <!-- Column 1 -->
+                <div>
+                    <h4 class="font-medium text-charcoal mb-4">Shop</h4>
+                    <ul class="space-y-2 text-sm text-warmgrey">
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Women</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Men</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Accessories</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">New Arrivals</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h4 class="font-medium text-charcoal mb-4">Client Care</h4>
+                    <ul class="space-y-2 text-sm text-warmgrey">
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Shipping</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Returns</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Size Guide</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h4 class="font-medium text-charcoal mb-4">The House</h4>
+                    <ul class="space-y-2 text-sm text-warmgrey">
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Our Story</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Sustainability</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Careers</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Press</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h4 class="font-medium text-charcoal mb-4">Follow</h4>
+                    <ul class="space-y-2 text-sm text-warmgrey">
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Instagram</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">Pinterest</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors duration-300">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-charcoal/10">
+                <p class="font-mono text-xs text-warmgrey tracking-wider">
+                    MAISON ECLAT © 2025
+                </p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-xs text-warmgrey hover:text-gold transition-colors duration-300">Privacy Policy</a>
+                    <a href="#" class="text-xs text-warmgrey hover:text-gold transition-colors duration-300">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.reveal, .clip-reveal');
+        
+        const revealOnScroll = () => {
+            revealElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('active');
+                }
+            });
+        };
+        
+        // Initial check
+        revealOnScroll();
+        
+        // Check on scroll
+        window.addEventListener('scroll', revealOnScroll);
+        
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

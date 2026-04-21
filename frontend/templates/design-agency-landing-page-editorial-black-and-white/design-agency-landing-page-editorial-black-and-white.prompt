@@ -1,0 +1,81 @@
+Design Agency Landing Page — Editorial Black & White
+CATEGORY
+Creative Agency / Portfolio
+DESIGN STYLE
+Minimalist monochrome, editorial serif typography, oversized headlines, sharp geometry, ink-black
+borders
+Overview
+Build a striking editorial landing page for ‘Studio Void’, a high-end creative design agency. The design is
+pure black and white — no colors, no gradients, no shadows. Every visual impact comes from
+typographic scale, border geometry, and negative space. The hero features an oversized display
+headline at 160px that bleeds off the viewport edge. Sections are separated by thick 4px horizontal
+rules. Cards invert to black on hover. The aesthetic should feel like opening a luxury fashion editorial —
+austere, commanding, and unforgettable.
+Design Tokens
+Background #FFFFFF — Pure white
+Foreground #000000 — Pure ink black
+Muted BG #F5F5F5 — Off-white for alt sections
+Secondary text ~~ #525252 — Dark gray
+Borders 1px / 2px / 4px / 8px solid #000000
+Typography Playfair Display display, Source Serif 4 body, JetBrains Mono labels
+Radius px — Zero everywhere, non-negotiable
+Shadows. None — Depth via inversion and borders only
+Page Sections
+1. Navigation
+— Minimal: Logo "VOID" in bold black serif left. "Work / Studio / Contact’ links right in small caps JetBrains
+Mono
+— Full-width 2px black border-bottom
+— On scroll past 100px: thin horizontal ticker appears below nav showing ‘STUDIO VOID — CREATIVE
+DESIGN — EST. MMXVIl — repeating, Framer Motion x animate
+
+2. Hero
+~ Massive H1: WE MAKE THINGS THAT MATTER" in Playfair Display Black, 10vw font-size, 0.04em
+tracking, line-height 0.8
+~The word MATTER" overflows and clips with overfiow-hidden on container — intentional editorial crop
+
+— Below headline: thin horizontal line (1p) full width, then 3-column grid below it
+
+— Col 1: ‘Scroll to explore’ in JetBrains Mono xs with animated downward arrow
+
+— Col 2: empty — negative space is intentional
+
+— Col 3: short paragraph, 16px Source Serif 4, about the studio
+
+— Framer Motion: hero text enters with clipPath reveal from bottom (y-100% 0, duration 1s, staggered
+words)
+3. Selected Work Grid
+— 4 projects ina 2x2 grid. Each cel: ful-bleed image in greyscale, project ttl in serif below, thin border
+around entire cell
+~ On hover: image desaturates 0 (already grey), border thickens to 4px, file inverts (white on black),
+Framer Motion layout animation
+~ Project metadata: client name + year in JetBrains Mono xs above image
+4. Services — Horizontal Scroll
+— Pinned horizontal scroll section using Framer Motion useScroll + useTransform
+— Services: Branding, Web Design, Motion, Editorial, Strategy — each as a large card 60vw wide
+— Card background alternates white/black. Text inverts accordingly
+~ Large service number (01, 02...) in 200px light gray serif, absolutely positioned top-left of card
+5. Studio Stats — Inverted Section
+— Full black background section with white text
+— 4 stats ina row: 200+ Projects’ / "12 Years’ /'40 Awards’ / 6 Countries’
+— Each stat giant number in 96px Playfair Display, label below in mono xs
+— Framer Motion countUp animation triggers on scroll into view
+6. Testimonial Pull Quote
+— Single testimonial fills the section: quote text at 40px italic Playfair Display
+— Oversized opening quotation mark (200px) in light gray absolutely positioned
+— Client name + role in JetBrains Mono below, with thin separator line
+7. Contact CTA
+— White section: "Let's build something remarkable * headline at 64px
+~ Email input with 2px bottom border only (no box), placeholder ‘your@email com”
+— "SEND button: black background, white text, uppercase, no radius
+— On hover: button inverts to white background with black border and text — instant Oms transition
+8. Footer
+~ 3-column grid: Studio address | Nav links | ‘STUDIO VOID © 2025"
+— Fullwidth 4px top border
+
+Animations
+— Hero text: clipPath reveal, staggered words, Framer Motion
+_ Work gic: whielnView scale 0.95 1 + opacity, stagger 0.155
+— Services: pinned horizontal scroll via useScroll transform
+— Stats number countup on view entry using Framer Motion animate
+— Ticker: continuous x-scroll using Framer Motion animate
+

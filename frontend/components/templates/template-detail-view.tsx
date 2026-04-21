@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -10,36 +9,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HtmlPreviewIframe } from "@/components/templates/html-preview-iframe";
 import { TemplatePreviewFrame } from "@/components/templates/template-preview-frame";
 import { TemplatePromptProGate } from "@/components/templates/template-prompt-pro-gate";
-import {
-  getTemplateById,
-  SAVED_TEMPLATES_CHANGED_EVENT,
-  type SavedTemplate,
-} from "@/lib/saved-templates";
+import type { FileTemplate } from "@/lib/file-templates";
 import { ArrowLeft, Lock, Maximize2, Sparkles, X } from "lucide-react";
 
-export function TemplateDetailView() {
-  const params = useParams();
-  const router = useRouter();
-  const id = typeof params.id === "string" ? params.id : Array.isArray(params.id) ? params.id[0] : "";
-  const [template, setTemplate] = useState<SavedTemplate | null | undefined>(undefined);
-  const [fullscreen, setFullscreen] = useState(false);
+type TemplateDetailViewProps = {
+  template: FileTemplate;
+};
 
-  useEffect(() => {
-    if (!id) {
-      setTemplate(null);
-      return;
-    }
-    const refresh = async () => {
-      const result = await getTemplateById(id);
-      setTemplate(result ?? null);
-    };
-    void refresh();
-    const onLocalChange = () => void refresh();
-    window.addEventListener(SAVED_TEMPLATES_CHANGED_EVENT, onLocalChange);
-    return () => {
-      window.removeEventListener(SAVED_TEMPLATES_CHANGED_EVENT, onLocalChange);
-    };
-  }, [id]);
+export function TemplateDetailView({ template }: TemplateDetailViewProps) {
+  const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
     if (!fullscreen) return;
@@ -54,30 +32,6 @@ export function TemplateDetailView() {
       window.removeEventListener("keydown", onKey);
     };
   }, [fullscreen]);
-
-  useEffect(() => {
-    if (template === null && id) {
-      router.replace("/templates");
-    }
-  }, [template, id, router]);
-
-  if (template === undefined) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <main className="mx-auto max-w-7xl px-4 py-24 text-center text-sm text-zinc-500">Loading…</main>
-      </div>
-    );
-  }
-
-  if (template === null) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <main className="mx-auto max-w-7xl px-4 py-24 text-center text-sm text-zinc-500">Redirecting…</main>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">

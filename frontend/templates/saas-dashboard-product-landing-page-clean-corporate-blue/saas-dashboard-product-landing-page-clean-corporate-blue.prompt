@@ -1,0 +1,81 @@
+SaaS Dashboard Product Landing Page — Clean Corporate
+Blue
+CATEGORY
+B2B SaaS / Analytics Platform
+DESIGN STYLE
+Clean corporate, soft blue-white, card-based, professional, dashboard Ul mockup in hero
+Overview
+Build a professional SaaS landing page for ‘DataPulse — Business Intelligence Platform’. The design is
+clean, corporate-friendly, and trustworthy — soft white (2FAFBFC) background, primary blue
+(#2563EB), and subtle card shadows. The hero showcases an animated dashboard mockup (built in
+HTML/CSS, not an image) that shows live-updating charts. This style is used by Notion, Linear, Vercel,
+and Retool — clean, functional, and conversion-focused.
+Design Tokens
+
+Background #FAFBFC — Soft blue-white
+
+Primary #2563EB — Trust blue for CTAs and accents
+
+Light Blue #EFF6FF — Blue-tinted surface for feature cards
+
+Border #E2E8F0 — Subtle slate dividers
+
+Text Primary #0F172A — Slate near-black
+
+Text Muted #647488 — Slate 500
+
+Success #10B981 — Metric positive green
+
+Typography Inter — all text, different weights for hierarchy
+
+Radius 8px cards, 6px buttons, 4px inputs
+Page Sections
+1. Navigation |
+
+~ Logo with blue icon mark. Nav: Product / Solutions / Pricing / Docs. Right: ‘Sign in’ text + ‘Start Free Trial’
+blue button
+
+— On scroll: white bg with shadow-sm border-b
+
+2. Hero — Dashboard Mockup
+~ Left content: badge ‘G2 Leader Spring 2025", H1 ‘Tum Data Into Decisions, Instantly’, body copy, two
+CTAs
+
+~ Right: Animated dashboard Ul built in HTML/CSS — card with line chart (SVG animated path), metric tiles
+with countup numbers, small bar chart — all fake data, all animated on mount
+
+~ Framer Motion: dashboard slides up (y60 0) and fades in with spring animation
+
+~ Metric counters: animate from 0 to final value using Framer Motion useMotionValue
+
+3. Trusted By Logos
+~~ Greyscale company logos, 6 in a row on desktop, auto-scroll marquee on mobile
+
+~ ‘Trusted by 5,000+ companies’ caption in small muted text
+
+4. Features — 3 Column
+~ 6 features in 3x2 grid: each card has blue icon in rounded blue background, ttle, description
+
+~ Hover: card lits with shadow-md, blue left border 2px appears
+
+~ Framer Motion stagger on scroll entry |
+
+5. Feature Spotlight — Alternating Rows
+~ 3 spotlight sections alternating leftright image+copy layout
+
+~ Each spotlight: screenshotimockup panel + text block with checkmark list
+
+~ Framer Motion: each spotlight section slides in from respective side
+
+6. Stats Section
+~ Blue gradient background, 4 stats: ‘9.9% Uptime / 2M+ Queries/Day / 150+ Integrations / 4 9+ Rating"
+
+— Large white numbers, muted description below
+7. Pricing
+~ 3tiers: Starter SO / Growth $49 / Enterprise custom
+~ Growth tier highlighted with biue background and subtle scale-up
+~ Feature comparison list with checkmarks/crosses.
+8.CTA + Footer
+~ Wide blue CTA banner: ‘Start your free trial today’
+~ Standard 4-column footer
+

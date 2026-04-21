@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Agency Landing Page — Editorial Black & White</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Source+Serif+4:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Design Tokens */
+        :root {
+            --bg-white: #FFFFFF;
+            --bg-muted: #F5F5F5;
+            --fg-black: #000000;
+            --text-secondary: #525252;
+            --border-thin: 1px solid #000000;
+            --border-medium: 2px solid #000000;
+            --border-thick: 4px solid #000000;
+            --border-heavy: 8px solid #000000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Source Serif 4', serif;
+            background-color: var(--bg-white);
+            color: var(--fg-black);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: var(--bg-white);
+            border-bottom: var(--border-medium);
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 24px;
+            letter-spacing: 0.1em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 48px;
+        }
+
+        .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--fg-black);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.5;
+        }
+
+        /* Ticker */
+        .ticker {
+            position: fixed;
+            top: 73px;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-white);
+            border-bottom: var(--border-thin);
+            padding: 8px 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: all 0.4s ease;
+            z-index: 999;
+        }
+
+        .ticker.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ticker-content {
+            display: flex;
+            animation: ticker 20s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ticker-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 0 48px;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 120px 48px 48px;
+            overflow: hidden;
+        }
+
+        .hero-headline-container {
+            overflow: hidden;
+            margin-bottom: 48px;
+        }
+
+        .hero-headline {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(80px, 10vw, 160px);
+            line-height: 0.8;
+            letter-spacing: 0.04em;
+            transform: translateY(100%);
+            animation: heroReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-headline span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100%);
+            animation: wordReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-headline span:nth-child(1) { animation-delay: 0.1s; }
+        .hero-headline span:nth-child(2) { animation-delay: 0.2s; }
+        .hero-headline span:nth-child(3) { animation-delay: 0.3s; }
+        .hero-headline span:nth-child(4) { animation-delay: 0.4s; }
+        .hero-headline span:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes heroReveal {
+            to { transform: translateY(0); }
+        }
+
+        @keyframes wordReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-line {
+            height: 1px;
+            background-color: var(--fg-black);
+            margin-bottom: 48px;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: lineReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+        }
+
+        @keyframes lineReveal {
+            to { transform: scaleX(1); }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 48px;
+        }
+
+        .scroll-indicator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .scroll-arrow {
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        .hero-text {
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 320px;
+            margin-left: auto;
+        }
+
+        /* Selected Work */
+        .work {
+            padding: 120px 48px;
+            border-top: var(--border-thick);
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 48px;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+            background-color: var(--fg-black);
+        }
+
+        .work-item {
+            background-color: var(--bg-white);
+            border: var(--border-thin);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .work-item.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .work-item:hover {
+            background-color: var(--fg-black);
+            border-width: 4px;
+        }
+
+        .work-meta {
+            padding: 24px 24px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            transition: color 0.4s ease;
+        }
+
+        .work-item:hover .work-meta {
+            color: var(--bg-muted);
+        }
+
+        .work-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .work-item:hover .work-image {
+            transform: scale(1.05);
+        }
+
+        .work-title {
+            padding: 24px;
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 600;
+            transition: color 0.4s ease;
+        }
+
+        .work-item:hover .work-title {
+            color: var(--bg-white);
+        }
+
+        /* Services - Horizontal Scroll */
+        .services {
+            padding: 120px 0;
+            border-top: var(--border-thick);
+            overflow: hidden;
+        }
+
+        .services-header {
+            padding: 0 48px 48px;
+        }
+
+        .services-container {
+            display: flex;
+            gap: 2px;
+            background-color: var(--fg-black);
+            padding: 2px;
+            width: fit-content;
+        }
+
+        .service-card {
+            width: 60vw;
+            min-width: 500px;
+            height: 70vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 48px;
+            overflow: hidden;
+        }
+
+        .service-card:nth-child(odd) {
+            background-color: var(--bg-white);
+            color: var(--fg-black);
+        }
+
+        .service-card:nth-child(even) {
+            background-color: var(--fg-black);
+            color: var(--bg-white);
+        }
+
+        .service-number {
+            position: absolute;
+            top: 24px;
+            left: 48px;
+            font-family: 'Playfair Display', serif;
+            font-size: 200px;
+            font-weight: 300;
+            line-height: 1;
+            opacity: 0.15;
+        }
+
+        .service-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .service-desc {
+            font-size: 16px;
+            line-height: 1.5;
+            max-width: 80%;
+        }
+
+        .service-card:nth-child(even) .service-desc {
+            color: var(--bg-muted);
+        }
+
+        /* Stats - Inverted Section */
+        .stats {
+            background-color: var(--fg-black);
+            color: var(--bg-white);
+            padding: 120px 48px;
+            border-top: var(--border-thick);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 48px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 96px;
+            font-weight: 600;
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--bg-muted);
+        }
+
+        /* Testimonial */
+        .testimonial {
+            padding: 120px 48px;
+            border-top: var(--border-thick);
+            position: relative;
+        }
+
+        .quote-mark {
+            position: absolute;
+            top: 80px;
+            left: 48px;
+            font-family: 'Playfair Display', serif;
+            font-size: 200px;
+            font-weight: 400;
+            line-height: 1;
+            color: var(--bg-muted);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .testimonial-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: 40px;
+            font-style: italic;
+            line-height: 1.3;
+            margin-bottom: 48px;
+        }
+
+        .testimonial-author {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .testimonial-line {
+            width: 60px;
+            height: 1px;
+            background-color: var(--fg-black);
+            margin: 16px 0;
+        }
+
+        /* Contact CTA */
+        .contact {
+            padding: 120px 48px;
+            border-top: var(--border-thick);
+        }
+
+        .contact-headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 64px;
+            max-width: 700px;
+        }
+
+        .contact-form {
+            max-width: 600px;
+        }
+
+        .email-input-wrapper {
+            margin-bottom: 32px;
+        }
+
+        .email-input {
+            width: 100%;
+            border: none;
+            border-bottom: var(--border-medium);
+            padding: 16px 0;
+            font-family: 'Source Serif 4', serif;
+            font-size: 24px;
+            background: transparent;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .email-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .email-input:focus {
+            border-bottom-width: 4px;
+        }
+
+        .submit-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 20px 48px;
+            background-color: var(--fg-black);
+            color: var(--bg-white);
+            border: 2px solid var(--fg-black);
+            cursor: pointer;
+            transition: all 0ms ease;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--bg-white);
+            color: var(--fg-black);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 48px;
+            border-top: var(--border-heavy);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 48px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.8;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .footer-address {
+            color: var(--text-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-links a {
+            color: var(--fg-black);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.5;
+        }
+
+        .footer-copyright {
+            text-align: right;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .hero-text {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                padding: 16px 24px;
+            }
+            
+            .nav-links {
+                gap: 24px;
+            }
+            
+            .hero, .work, .services, .stats, .testimonial, .contact {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            
+            .hero-headline {
+                font-size: clamp(48px, 12vw, 80px);
+            }
+            
+            .contact-headline {
+                font-size: 36px;
+            }
+            
+            .testimonial-quote {
+                font-size: 24px;
+            }
+            
+            .stat-number {
+                font-size: 60px;
+            }
+            
+            .footer {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .footer-copyright {
+                text-align: left;
+            }
+            
+            .service-card {
+                width: 80vw;
+                min-width: 300px;
+                padding: 32px;
+            }
+            
+            .service-number {
+                font-size: 120px;
+            }
+            
+            .service-name {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-logo">VOID</div>
+        <div class="nav-links">
+            <a href="#work">Work</a>
+            <a href="#studio">Studio</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Ticker -->
+    <div class="ticker" id="ticker">
+        <div class="ticker-content">
+            <span class="ticker-item">Studio Void — Creative Design — Est. MMXVII —</span>
+            <span class="ticker-item">Studio Void — Creative Design — Est. MMXVII —</span>
+            <span class="ticker-item">Studio Void — Creative Design — Est. MMXVII —</span>
+            <span class="ticker-item">Studio Void — Creative Design — Est. MMXVII —</span>
+            <span class="ticker-item">Studio Void — Creative Design — Est. MMXVII —</span>
+            <span class="ticker-item">Studio Void — Creative Design — Est. MMXVII —</span>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-headline-container">
+            <h1 class="hero-headline">
+                <span>WE</span>
+                <span>MAKE</span>
+                <span>THINGS</span>
+                <span>THAT</span>
+                <span>MATTER</span>
+            </h1>
+        </div>
+        <div class="hero-line"></div>
+        <div class="hero-grid">
+            <div class="scroll-indicator">
+                <span>Scroll to explore</span>
+                <span class="scroll-arrow">↓</span>
+            </div>
+            <div></div>
+            <p class="hero-text">Studio Void is an independent creative agency crafting brand identities, digital experiences, and editorial design for clients who demand excellence. We believe in the power of restraint.</p>
+        </div>
+    </section>
+
+    <!-- Selected Work -->
+    <section class="work" id="work">
+        <p class="section-label">Selected Work</p>
+        <div class="work-grid">
+            <div class="work-item">
+                <div class="work-meta">Acme Corp — 2024</div>
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80" alt="Project" class="work-image">
+                <div class="work-title">Aether Brand Identity</div>
+            </div>
+            <div class="work-item">
+                <div class="work-meta">Monolith Studios — 2024</div>
+                <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80" alt="Project" class="work-image">
+                <div class="work-title">Monolith Digital Platform</div>
+            </div>
+            <div class="work-item">
+                <div class="work-meta">Vesper Magazine — 2023</div>
+                <img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80" alt="Project" class="work-image">
+                <div class="work-title">Vesper Editorial System</div>
+            </div>
+            <div class="work-item">
+                <div class="work-meta">Nocturne Records — 2023</div>
+                <img src="https://images.unsplash.com/photo-1545235617-9465d2a55698?w=800&q=80" alt="Project" class="work-image">
+                <div class="work-title">Nocturne Visual Language</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services" id="studio">
+        <div class="services-header">
+            <p class="section-label">Services</p>
+        </div>
+        <div class="services-container" id="servicesContainer">
+            <div class="service-card">
+                <span class="service-number">01</span>
+                <h3 class="service-name">Branding</h3>
+                <p class="service-desc">Strategic brand identity systems that define how the world sees you. From naming to visual language.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-number">02</span>
+                <h3 class="service-name">Web Design</h3>
+                <p class="service-desc">Immersive digital experiences that balance aesthetics with functionality. Every interaction considered.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-number">03</span>
+                <h3 class="service-name">Motion</h3>
+                <p class="service-desc">Dynamic storytelling through animation. From subtle UI moments to full brand films.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-number">04</span>
+                <h3 class="service-name">Editorial</h3>
+                <p class="service-desc">Publication design for print and digital. Typography-driven layouts that demand attention.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-number">05</span>
+                <h3 class="service-name">Strategy</h3>
+                <p class="service-desc">Creative direction and brand positioning that aligns your vision with market opportunity.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number" data-target="200">0</div>
+                <div class="stat-label">Projects Completed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="12">0</div>
+                <div class="stat-label">Years in Practice</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="40">0</div>
+                <div class="stat-label">Industry Awards</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="6">0</div>
+                <div class="stat-label">Countries Served</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="testimonial">
+        <span class="quote-mark">"</span>
+        <div class="testimonial-content">
+            <p class="testimonial-quote">Studio Void transformed our brand from forgettable to iconic. Their ruthless attention to detail and refusal to compromise on craft resulted in a visual system that has become our greatest competitive advantage.</p>
+            <div class="testimonial-line"></div>
+            <p class="testimonial-author">Elena Vasquez — CEO, Aether Industries</p>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact" id="contact">
+        <h2 class="contact-headline">Let's build something remarkable.</h2>
+        <form class="contact-form" id="contactForm">
+            <div class="email-input-wrapper">
+                <input type="email" class="email-input" placeholder="your@email.com" required>
+            </div>
+            <button type="submit" class="submit-btn">Send</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-address">
+            Studio Void<br>
+            47 Mercer Street<br>
+            New York, NY 10013
+        </div>
+        <div class="footer-links">
+            <a href="#work">Work</a>
+            <a href="#studio">Studio</a>
+            <a href="#contact">Contact</a>
+            <a href="#">Instagram</a>
+        </div>
+        <div class="footer-copyright">
+            Studio Void © 2025
+        </div>
+    </footer>
+
+    <script>
+        // Ticker visibility on scroll
+        const ticker = document.getElementById('ticker');
+        let lastScrollY = 0;
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            if (scrollY > 100) {
+                ticker.classList.add('visible');
+            } else {
+                ticker.classList.remove('visible');
+            }
+            lastScrollY = scrollY;
+        }, { passive: true });
+
+        // Intersection Observer for work items
+        const workItems = document.querySelectorAll('.work-item');
+        const workObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 150);
+                    workObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        workItems.forEach(item => workObserver.observe(item));
+
+        // Stats counter animation
+        const statNumbers = document.querySelectorAll('.stat-number');
+        let statsAnimated = false;
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !statsAnimated) {
+                    statsAnimated = true;
+                    statNumbers.forEach(stat => {
+                        const target = parseInt(stat.getAttribute('data-target'));
+                        const duration = 2000;
+                        const start = performance.now();
+                        
+                        const animate = (currentTime) => {
+                            const elapsed = currentTime - start;
+                            const progress = Math.min(elapsed / duration, 1);
+                            const easeOut = 1 - Math.pow(1 - progress, 3);
+                            const current = Math.floor(easeOut * target);
+                            stat.textContent = current + (target >= 100 ? '+' : '');
+                            
+                            if (progress < 1) {
+                                requestAnimationFrame(animate);
+                            }
+                        };
+                        
+                        requestAnimationFrame(animate);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelector('.stats').querySelector('.stats-grid') && 
+        statsObserver.observe(document.querySelector('.stats'));
+
+        // Horizontal scroll for services
+        const servicesContainer = document.getElementById('servicesContainer');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        servicesContainer.addEventListener('mousedown', (e) => {
+            isDown = true;
+            servicesContainer.style.cursor = 'grabbing';
+            startX = e.pageX - servicesContainer.offsetLeft;
+            scrollLeft = servicesContainer.parentElement.scrollLeft;
+        });
+
+        servicesContainer.addEventListener('mouseleave', () => {
+            isDown = false;
+            servicesContainer.style.cursor = 'grab';
+        });
+
+        servicesContainer.addEventListener('mouseup', () => {
+            isDown = false;
+            servicesContainer.style.cursor = 'grab';
+        });
+
+        servicesContainer.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - servicesContainer.offsetLeft;
+            const walk = (x - startX) * 2;
+            servicesContainer.parentElement.scrollLeft = scrollLeft - walk;
+        });
+
+        // Horizontal scroll with wheel
+        const servicesSection = document.querySelector('.services');
+        servicesSection.addEventListener('wheel', (e) => {
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                e.preventDefault();
+                servicesSection.scrollLeft += e.deltaY;
+            }
+        }, { passive: false });
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('.submit-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Sent';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                e.target.reset();
+            }, 2000);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 74;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

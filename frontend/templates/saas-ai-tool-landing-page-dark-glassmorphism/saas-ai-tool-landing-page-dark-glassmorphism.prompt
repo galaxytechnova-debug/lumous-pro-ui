@@ -1,0 +1,90 @@
+SaaS Al Tool Landing Page — Dark Glassmorphism
+CATEGORY
+SaaS / Al Product
+DESIGN STYLE
+Dark glassmorphism, neon accent (violet/cyan), floating gradient orbs, frosted glass cards
+Overview
+Build a visually stunning, conversion-optimized SaaS landing page for an Al writing assistant called
+“Verba Al'. The design uses a deep dark background (20A0AOF) with glassmorphic card panels,
+animated gradient orbs, and electric violet (7C3AED) / cyan (206B6D4) dual-tone neon accents. The
+hero features a live typing demo animation showing Verba generating text. The page should feel like a
+premium tech product — dark, futuristic, and confident.
+Tech Stack
+Nextjs 14 App Tailwind CSS v3 Framer Motion TypeScript Lucide React
+
+Design Tokens
+
+Background ‘#0ADAOF — Near-black, space-iike depth
+
+Primary #TC3AED — Electric violet for CTAs, highlights
+
+Secondary #06B6D4 — Cyan for secondary accents, glow
+
+Surface rgba(255,255,265,0.04) — Frosted glass panels
+Border rgba(255,255,255,0.08) — Subtle glass edges
+Text #FBFAFC primary / #94A388 muted
+Typography Cal Sans display, Inter body — Google Fonts
+Radius 12px cards, 8px buttons, 9999px pills
+Page Sections
+1. Sticky Navigation
+~ Logo left: Verba’ wordmark with violet gradient fill on V letter
+— Nav links center: Features, Pricing, Docs, Blog — text-sm font-medium text-slate-300 hovertext-white
+transition
+~ Right: ‘Sign In’ ghost button + ‘Start Free" filled violet button with arrow icon
+~ On scroll: backdrop-blur-md bg-black/40 border-b border-white/8 — glass nav effect with Framer Motion
+opacity animation
+2. Hero Section
+~ Gradient orb 1: 600px circle at top-left, violetindigo, opacity 30%, blur-3«, animated float with Framer
+Motion keyframes (y: 0 ~ -30 — 0, 8s loop)
+~ Gradient orb 2: 500px circle at bottom-right, cyan, opacity 20%, opposite float phase
+~ Pill badge: ‘Introducing Verba 2.0 — with shimmer animation — animate-shimmer custom keyframe
+sliding gradient
+~ HL: ‘Write 10x Faster with Al That Understands You' — 72px, Cal Sans, tight tracking, white, line-break
+after Faster
+~ Subheadiine: 18px Inter, slate-300, max-w-lg centered
+~ CTA row: Primary ‘Start Writing Free’ violet button with sparkles icon + Secondary ‘Watch Demo with play
+icon, glass styling
+~ Hero demo card: glassmorphic panel (backdrop-blur-xI bg-white/ border border-white/10 rounded-xi)
+showing fake text editor with Framer Motion typewriter animation typing a paragraph
+~ Trust strip below hero: '10,000+ teams trust Verba + 5 greyscale company logo SVGs in a row
+
+3. Features Bento Grid
+— Section label: ‘CAPABILITIES in violet monospace small caps.
+— H2: Everything you need to write better’ — 48px, white
+— Bento layout: CSS grid, asymmetric. Large card (col-span-2) left, two stacked small cards right, then three
+equal cards below
+— Card 1 (large): Al rewrite feature with animated before/after text diff showing red — green highlight
+transition on hover
+— Card 2: Tone detector with animated gradient ring around an emoji face that shifts expression
+~ Card 3: Real-time collaboration with pulsing avatar dots
+— Card 4: Multi-language with rotating globe using CSS 3D transform
+— Card 5: API access — shows a code snippet block with syntax highlighting
+~All cards: glass surface, violet border-glow on hover (box-shadow: 0 0 0 1px #7C3AED + 0 0 40px
+rgba(124,58.237.0.15))
+4. Social Proof Marquee
+— Two-row ticker: top row scrolls left, bottom row scrols right — Framer Motion animate x with linear repeat
+
+— Eachtile: quote + author name + role + star rating — glass card 280px wide
+— Overflow hidden on container. fade masks on leftiright edges with CSS gradient
+5. Pricing Section
+— Three-tier pricing: Free / Pro ($29/mo) / Team ($79/mo)
+— Protier visually elevated: violet background, white text, Most Popular’ badge with pulse animation
+— Each card: rounded-xl, list of features with checkmark icons, CTA button
+— Annualimonthly toggle with Framer Motion layout animation sliding the underline
+6. FAQ Accordion
+— 8 questions, each as an accordion item
+— Framer Motion AnimatePresence for enter/exit of answer content
+— Plusiminus icon rotates 45deg on open — Framer Motion rotate transition
+7. CTA Banner
+— Full-width dark section with large "Start your free trial’ heading
+— Animated gradient background: violet — cyan diagonal, subtle keyframe shift
+— Single email input + ‘Get Started’ button inline
+8. Footer
+— 4-column grid: Product, Resources, Company. Legal
+— Bottom bar: copyright + social icons (Twitter/X, GitHub, Linkedin) with hover scale
+Animations
+— Hero orbs: Framer Motion keyframes, y oscillation, 8-125 duration, infinite
+— Hero card typewriter: setTimeout-based character reveal, cursor blink CSS animation
+— Feature cards: Framer Motion whilelnView with staggerChildren 0.15, y-40~ 0 + opacity 0—1
+— Nav glass: useScroll + useTransform for opacity and blur values
+— Marquee rows: Framer Motion animate x-0—~100% with repeat Infinity and no repeatDelay

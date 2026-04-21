@@ -47,7 +47,7 @@ export function ProCodeGate({ componentName }: ProCodeGateProps) {
           href="/pricing"
           className="mt-4 text-xs text-zinc-500 underline-offset-4 transition hover:text-zinc-300 hover:underline"
         >
-          View pricing when available
+          View pricing
         </Link>
       </div>
     </div>

@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Portfolio Landing Page — Terminal/Hacker Aesthetic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0D0D0D;
+            --text: #EBEBE5;
+            --accent: #00FF41;
+            --dim: #006614;
+            --warning: #FFD700;
+            --error: #FF4444;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* CRT Scanline Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            opacity: 0.4;
+        }
+
+        /* CRT Flicker */
+        @keyframes flicker {
+            0%, 100% { opacity: 0.97; }
+            50% { opacity: 1; }
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+            animation: flicker 0.15s infinite;
+        }
+
+        /* Cursor Blink */
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background: var(--accent);
+            animation: blink 1s infinite;
+            margin-left: 2px;
+            vertical-align: middle;
+        }
+
+        /* Boot Sequence */
+        #boot-sequence {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            z-index: 2000;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #boot-sequence.hidden {
+            display: none;
+        }
+
+        .boot-line {
+            color: var(--accent);
+            margin-bottom: 4px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.1s, transform 0.1s;
+        }
+
+        .boot-line.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #skip-btn {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, background 0.3s;
+        }
+
+        #skip-btn.visible {
+            opacity: 1;
+        }
+
+        #skip-btn:hover {
+            background: rgba(0, 255, 65, 0.1);
+        }
+
+        /* Main Container */
+        #main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+        }
+
+        /* Terminal Window */
+        .terminal-window {
+            border: 1px solid var(--dim);
+            margin-bottom: 60px;
+        }
+
+        .terminal-header {
+            background: rgba(0, 255, 65, 0.05);
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--dim);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-btn.red { background: #FF5F56; }
+        .terminal-btn.yellow { background: #FFBD2E; }
+        .terminal-btn.green { background: #27C93F; }
+
+        .terminal-path {
+            margin-left: auto;
+            color: var(--dim);
+            font-size: 12px;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        /* Prompt */
+        .prompt {
+            color: var(--accent);
+        }
+
+        .command-line {
+            margin-bottom: 16px;
+        }
+
+        .output {
+            color: var(--text);
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+        }
+
+        /* ASCII Art */
+        .ascii-art {
+            color: var(--accent);
+            font-size: 12px;
+            line-height: 1.2;
+            margin: 20px 0;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            text-align: center;
+            margin-top: 40px;
+            animation: blink 1s infinite;
+        }
+
+        .scroll-indicator span {
+            color: var(--accent);
+        }
+
+        /* Section Headers */
+        .section {
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Projects - ls -la style */
+        .project-list {
+            margin-top: 20px;
+        }
+
+        .project-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 102, 20, 0.3);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .project-item:hover {
+            background: rgba(0, 255, 65, 0.03);
+        }
+
+        .project-row {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+        }
+
+        .project-perms { color: var(--accent); width: 100px; }
+        .project-size { color: var(--dim); width: 80px; }
+        .project-date { color: var(--dim); width: 140px; }
+        .project-name { color: var(--text); }
+        .project-name a { color: var(--warning); text-decoration: none; }
+        .project-name a:hover { text-decoration: underline; }
+
+        .project-expand {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s;
+            padding: 0 20px;
+        }
+
+        .project-expand.open {
+            max-height: 300px;
+            padding: 16px 20px;
+        }
+
+        .project-details {
+            color: var(--text);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .project-details .label {
+            color: var(--dim);
+        }
+
+        .project-details .value {
+            color: var(--accent);
+        }
+
+        /* Skills - ASCII Progress Bars */
+        .skill-category {
+            margin-bottom: 30px;
+        }
+
+        .category-header {
+            color: var(--dim);
+            margin-bottom: 12px;
+        }
+
+        .skill-item {
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .skill-name {
+            display: inline-block;
+            width: 120px;
+            color: var(--text);
+        }
+
+        .skill-bar {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .skill-fill {
+            color: var(--accent);
+        }
+
+        .skill-empty {
+            color: var(--dim);
+        }
+
+        .skill-percent {
+            color: var(--dim);
+            margin-left: 8px;
+        }
+
+        /* Work History - Log style */
+        .log-entry {
+            margin-bottom: 24px;
+            padding-left: 20px;
+            border-left: 2px solid var(--dim);
+        }
+
+        .log-timestamp {
+            color: var(--accent);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .log-content {
+            color: var(--text);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .log-content .company {
+            color: var(--warning);
+        }
+
+        .log-content .role {
+            color: var(--accent);
+        }
+
+        .log-detail {
+            color: var(--dim);
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+
+        /* Contact - Interactive Terminal */
+        .contact-terminal {
+            border: 1px solid var(--dim);
+            padding: 20px;
+        }
+
+        .contact-form {
+            margin-top: 20px;
+        }
+
+        .input-line {
+            margin-bottom: 20px;
+        }
+
+        .input-prompt {
+            color: var(--dim);
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .input-field {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-field input,
+        .input-field textarea {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--dim);
+            color: var(--accent);
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px 0;
+            flex: 1;
+            outline: none;
+        }
+
+        .input-field input:focus,
+        .input-field textarea:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        .input-field textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-family: inherit;
+            font-size: 13px;
+            padding: 10px 24px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: rgba(0, 255, 65, 0.1);
+        }
+
+        .success-message {
+            color: var(--accent);
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .success-message.visible {
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--dim);
+            font-size: 12px;
+            border-top: 1px solid var(--dim);
+            margin-top: 60px;
+        }
+
+        /* Typewriter effect helper */
+        .typing {
+            border-right: 8px solid var(--accent);
+            animation: blink 1s infinite;
+        }
+
+        /* Skills grid in hero */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .skill-tag {
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body {
+                font-size: 12px;
+            }
+            
+            .ascii-art {
+                font-size: 8px;
+            }
+            
+            .project-row {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .project-perms,
+            .project-size,
+            .project-date {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Boot Sequence -->
+    <div id="boot-sequence">
+        <div class="boot-line">BIOS v2.4.1 ... <span class="status">OK</span></div>
+        <div class="boot-line">Loading kernel .................. <span class="status">OK</span></div>
+        <div class="boot-line">Mounting filesystem ............. <span class="status">OK</span></div>
+        <div class="boot-line">Initializing network stack ...... <span class="status">OK</span></div>
+        <div class="boot-line">Loading modules ................. <span class="status">OK</span></div>
+        <div class="boot-line">Starting system services ........ <span class="status">OK</span></div>
+        <div class="boot-line">Mounting /home .................. <span class="status">OK</span></div>
+        <div class="boot-line">Loading user profile ............ <span class="status">OK</span></div>
+        <div class="boot-line">Establishing secure connection .. <span class="status">OK</span></div>
+        <div class="boot-line">Welcome to Alex Chen's Portfolio Server</div>
+        <div class="boot-line" style="color: var(--dim);">Type 'help' for available commands</div>
+    </div>
+    <button id="skip-btn">[ SKIP INTRO ]</button>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <!-- Terminal Hero -->
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <span class="terminal-btn red"></span>
+                <span class="terminal-btn yellow"></span>
+                <span class="terminal-btn green"></span>
+                <span class="terminal-path">~/portfolio</span>
+            </div>
+            <div class="terminal-body">
+                <div class="command-line">
+                    <span class="prompt">alex@portfolio:~$</span> <span id="hero-command" class="typing"></span>
+                </div>
+                <div id="hero-output" class="output" style="display: none;">
+                    <div class="ascii-art">
+    ___    ____  __    ___________   ________
+   /   |  / __ \/ /   / ____/  _/ | / / ____/
+  / /| | / /_/ / /   / / __ / //  |/ / / __  
+ / ___ |/ ____/ /___/ /_/ // // /|  / /_/ /  
+/_/  |_/_/   /_____/\____/___/_/ |_/\____/   
+                                             
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <span style="color: var(--accent);">></span> Full Stack Engineer<br>
+                        <span style="color: var(--accent);">></span> San Francisco, CA<br>
+                        <span style="color: var(--accent);">></span> Building scalable systems & elegant interfaces
+                    </div>
+                </div>
+                
+                <div class="command-line" id="skills-command" style="display: none;">
+                    <span class="prompt">alex@portfolio:~$</span> <span id="skills-cmd-text" class="typing"></span>
+                </div>
+                <div id="skills-output" class="output" style="display: none;">
+                    <div class="skills-grid">
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">PostgreSQL</span>
+                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">GraphQL</span>
+                    </div>
+                </div>
+                
+                <div class="scroll-indicator" style="display: none;" id="scroll-hint">
+                    <span>▼ scroll down for more ▼</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <section class="section" id="projects">
+            <div class="command-line">
+                <span class="prompt">alex@portfolio:~$</span> ls -la projects/
+            </div>
+            <div class="project-list">
+                <div class="project-item" onclick="toggleProject(this)">
+                    <div class="project-row">
+                        <span class="project-perms">-rw-r--r--</span>
+                        <span class="project-size">24KB</span>
+                        <span class="project-date">2024-01-15</span>
+                        <span class="project-name">ecommerce-platform.md</span>
+                    </div>
+                    <div class="project-expand">
+                        <div class="project-details">
+                            <span class="label">Description:</span> <span class="value">Full-stack e-commerce platform with real-time inventory</span><br>
+                            <span class="label">Tech Stack:</span> <span class="value">Next.js, Node.js, PostgreSQL, Redis, Stripe</span><br>
+                            <span class="label">Links:</span> <a href="#" style="color: var(--warning);">[GitHub]</a> <a href="#" style="color: var(--warning);">[Live Demo]</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-item" onclick="toggleProject(this)">
+                    <div class="project-row">
+                        <span class="project-perms">-rw-r--r--</span>
+                        <span class="project-size">18KB</span>
+                        <span class="project-date">2023-11-20</span>
+                        <span class="project-name">ai-task-manager.md</span>
+                    </div>
+                    <div class="project-expand">
+                        <div class="project-details">
+                            <span class="label">Description:</span> <span class="value">AI-powered task management with natural language processing</span><br>
+                            <span class="label">Tech Stack:</span> <span class="value">React, Python, OpenAI API, FastAPI, MongoDB</span><br>
+                            <span class="label">Links:</span> <a href="#" style="color: var(--warning);">[GitHub]</a> <a href="#" style="color: var(--warning);">[Live Demo]</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-item" onclick="toggleProject(this)">
+                    <div class="project-row">
+                        <span class="project-perms">-rw-r--r--</span>
+                        <span class="project-size">32KB</span>
+                        <span class="project-date">2023-08-10</span>
+                        <span class="project-name">distributed-cache.md</span>
+                    </div>
+                    <div class="project-expand">
+                        <div class="project-details">
+                            <span class="label">Description:</span> <span class="value">High-performance distributed caching system</span><br>
+                            <span class="label">Tech Stack:</span> <span class="value">Go, gRPC, Kubernetes, Prometheus, etcd</span><br>
+                            <span class="label">Links:</span> <a href="#" style="color: var(--warning);">[GitHub]</a> <a href="#" style="color: var(--warning);">[Documentation]</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-item" onclick="toggleProject(this)">
+                    <div class="project-row">
+                        <span class="project-perms">-rw-r--r--</span>
+                        <span class="project-size">15KB</span>
+                        <span class="project-date">2023-05-02</span>
+                        <span class="project-name">webrtc-video-chat.md</span>
+                    </div>
+                    <div class="project-expand">
+                        <div class="project-details">
+                            <span class="label">Description:</span> <span class="value">Secure peer-to-peer video conferencing application</span><br>
+                            <span class="label">Tech Stack:</span> <span class="value">TypeScript, WebRTC, Socket.io, Express, SFU</span><br>
+                            <span class="label">Links:</span> <a href="#" style="color: var(--warning);">[GitHub]</a> <a href="#" style="color: var(--warning);">[Live Demo]</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="section" id="skills">
+            <div class="command-line">
+                <span class="prompt">alex@portfolio:~$</span> cat skills.txt
+            </div>
+            
+            <div class="skill-category">
+                <div class="category-header"># Frontend</div>
+                <div class="skill-item" data-percent="95">
+                    <span class="skill-name">React</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+                <div class="skill-item" data-percent="90">
+                    <span class="skill-name">TypeScript</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+                <div class="skill-item" data-percent="85">
+                    <span class="skill-name">Next.js</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <div class="category-header"># Backend</div>
+                <div class="skill-item" data-percent="88">
+                    <span class="skill-name">Node.js</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+                <div class="skill-item" data-percent="82">
+                    <span class="skill-name">Python</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+                <div class="skill-item" data-percent="80">
+                    <span class="skill-name">PostgreSQL</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <div class="category-header"># DevOps</div>
+                <div class="skill-item" data-percent="85">
+                    <span class="skill-name">Docker</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+                <div class="skill-item" data-percent="78">
+                    <span class="skill-name">Kubernetes</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+                <div class="skill-item" data-percent="90">
+                    <span class="skill-name">AWS</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <div class="category-header"># Tools</div>
+                <div class="skill-item" data-percent="92">
+                    <span class="skill-name">Git</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+                <div class="skill-item" data-percent="85">
+                    <span class="skill-name">Linux</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+                <div class="skill-item" data-percent="88">
+                    <span class="skill-name">Vim</span>
+                    <span class="skill-bar">
+                        [<span class="skill-fill"></span><span class="skill-empty"></span>]
+                    </span>
+                    <span class="skill-percent">0%</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Work History Section -->
+        <section class="section" id="experience">
+            <div class="command-line">
+                <span class="prompt">alex@portfolio:~$</span> tail -20 experience.log
+            </div>
+            
+            <div class="log-entry">
+                <div class="log-timestamp">[2024-03-01 09:00:00]</div>
+                <div class="log-content">
+                    <span class="role">START JOB:</span> Senior Full Stack Engineer at <span class="company">TechCorp Inc.</span><br>
+                    <div class="log-detail">
+                        Leading a team of 5 engineers building microservices architecture<br>
+                        Reduced API latency by 60% through caching strategies<br>
+                        Migrated legacy monolith to containerized services
+                    </div>
+                </div>
+            </div>
+            
+            <div class="log-entry">
+                <div class="log-timestamp">[2022-06-15 10:30:00]</div>
+                <div class="log-content">
+                    <span class="role">START JOB:</span> Full Stack Developer at <span class="company">StartupXYZ</span><br>
+                    <div class="log-detail">
+                        Built MVP from scratch to 100K users in 6 months<br>
+                        Implemented CI/CD pipeline reducing deploy time by 80%<br>
+                        Designed and optimized PostgreSQL database schema
+                    </div>
+                </div>
+            </div>
+            
+            <div class="log-entry">
+                <div class="log-timestamp">[2020-09-01 08:00:00]</div>
+                <div class="log-content">
+                    <span class="role">START JOB:</span> Junior Developer at <span class="company">DigitalAgency</span><br>
+                    <div class="log-detail">
+                        Developed responsive web applications for enterprise clients<br>
+                        Integrated third-party APIs and payment gateways<br>
+                        Maintained and optimized existing React codebase
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section" id="contact">
+            <div class="command-line">
+                <span class="prompt">alex@portfolio:~$</span> send-message
+            </div>
+            <div class="output" style="color: var(--dim);">Initializing secure transmission channel...</div>
+            
+            <div class="contact-terminal">
+                <form class="contact-form" id="contact-form" onsubmit="handleSubmit(event)">
+                    <div class="input-line" id="input-name">
+                        <div class="input-prompt"># Enter your identifier (name):</div>
+                        <div class="input-field">
+                            <span class="prompt">></span>
+                            <input type="text" name="name" required placeholder="_" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    <div class="input-line" id="input-email" style="opacity: 0.3;">
+                        <div class="input-prompt"># Enter contact coordinates (email):</div>
+                        <div class="input-field">
+                            <span class="prompt">></span>
+                            <input type="email" name="email" required placeholder="_" autocomplete="off" disabled>
+                        </div>
+                    </div>
+                    
+                    <div class="input-line" id="input-message" style="opacity: 0.3;">
+                        <div class="input-prompt"># Transmission content (message):</div>
+                        <div class="input-field">
+                            <span class="prompt">></span>
+                            <textarea name="message" required placeholder="_" disabled></textarea>
+                        </div>
+                    </div>
+                    
+                    <div id="submit-area" style="opacity: 0.3;">
+                        <button type="submit" class="submit-btn" disabled>[ TRANSMIT ]</button>
+                    </div>
+                </form>
+                
+                <div class="success-message" id="success-msg">
+                    <span style="color: var(--accent);">✓</span> Message sent successfully.<br>
+                    <span style="color: var(--dim);">Transmission complete. Response time: ~24hrs</span>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            alex@portfolio:~$ echo "© 2024 Alex Chen. All systems operational."<br>
+            <span style="color: var(--accent);">Connection secured via SSH | Uptime: ∞</span>
+        </footer>
+    </div>
+
+    <script>
+        // Boot Sequence
+        const bootLines = document.querySelectorAll('.boot-line');
+        const skipBtn = document.getElementById('skip-btn');
+        const bootSequence = document.getElementById('boot-sequence');
+        const mainContent = document.getElementById('main-content');
+        let bootComplete = false;
+
+        function runBootSequence() {
+            let delay = 0;
+            bootLines.forEach((line, index) => {
+                delay += 200;
+                setTimeout(() => {
+                    line.classList.add('visible');
+                    if (index === bootLines.length - 1) {
+                        setTimeout(finishBoot, 500);
+                    }
+                }, delay);
+            });
+        }
+
+        function finishBoot() {
+            if (bootComplete) return;
+            bootComplete = true;
+            bootSequence.classList.add('hidden');
+            mainContent.classList.add('visible');
+            startHeroAnimation();
+        }
+
+        skipBtn.addEventListener('click', finishBoot);
+
+        // Show skip button after 0.5s
+        setTimeout(() => {
+            skipBtn.classList.add('visible');
+        }, 500);
+
+        // Start boot sequence
+        runBootSequence();
+
+        // Typewriter Effect
+        function typeWriter(element, text, speed = 50, callback) {
+            let i = 0;
+            element.classList.add('typing');
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    element.classList.remove('typing');
+                    if (callback) callback();
+                }
+            }
+            
+            type();
+        }
+
+        // Hero Animation Sequence
+        function startHeroAnimation() {
+            const heroCommand = document.getElementById('hero-command');
+            const heroOutput = document.getElementById('hero-output');
+            const skillsCommand = document.getElementById('skills-command');
+            const skillsCmdText = document.getElementById('skills-cmd-text');
+            const skillsOutput = document.getElementById('skills-output');
+            const scrollHint = document.getElementById('scroll-hint');
+
+            typeWriter(heroCommand, 'whoami', 80, () => {
+                setTimeout(() => {
+                    heroOutput.style.display = 'block';
+                    setTimeout(() => {
+                        skillsCommand.style.display = 'block';
+                        typeWriter(skillsCmdText, 'ls skills/', 60, () => {
+                            setTimeout(() => {
+                                skillsOutput.style.display = 'block';
+                                scrollHint.style.display = 'block';
+                            }, 400);
+                        });
+                    }, 600);
+                }, 400);
+            });
+        }
+
+        // Project Toggle
+        function toggleProject(element) {
+            const expand = element.querySelector('.project-expand');
+            expand.classList.toggle('open');
+        }
+
+        // Skill Bars Animation
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const skillItems = entry.target.querySelectorAll('.skill-item');
+                    skillItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            animateSkillBar(item);
+                        }, index * 100);
+                    });
+                    skillObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        function animateSkillBar(item) {
+            const percent = parseInt(item.dataset.percent);
+            const fill = item.querySelector('.skill-fill');
+            const empty = item.querySelector('.skill-empty');
+            const percentText = item.querySelector('.skill-percent');
+            
+            const barLength = 20;
+            const fillLength = Math.round((percent / 100) * barLength);
+            const emptyLength = barLength - fillLength;
+            
+            let currentFill = 0;
+            const duration = 1000;
+            const steps = 20;
+            const interval = duration / steps;
+            
+            const timer = setInterval(() => {
+                currentFill++;
+                const currentFillLength = Math.round((currentFill / steps) * fillLength);
+                const currentEmptyLength = barLength - currentFillLength;
+                
+                fill.textContent = '█'.repeat(currentFillLength);
+                empty.textContent = '░'.repeat(currentEmptyLength);
+                percentText.textContent = Math.round((currentFill / steps) * percent) + '%';
+                
+                if (currentFill >= steps) {
+                    clearInterval(timer);
+                }
+            }, interval);
+        }
+
+        skillObserver.observe(document.getElementById('skills'));
+
+        // Section Reveal Animation
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section').forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Contact Form Progressive Reveal
+        const contactInputs = document.querySelectorAll('#contact-form input, #contact-form textarea');
+        const inputLines = document.querySelectorAll('.input-line');
+        const submitArea = document.getElementById('submit-area');
+
+        contactInputs.forEach((input, index) => {
+            input.addEventListener('input', () => {
+                if (input.value.trim() && index < contactInputs.length - 1) {
+                    const nextLine = inputLines[index + 1];
+                    const nextInput = contactInputs[index + 1];
+                    nextLine.style.opacity = '1';
+                    nextInput.disabled = false;
+                    if (index === contactInputs.length - 2) {
+                        submitArea.style.opacity = '1';
+                        submitArea.querySelector('button').disabled = false;
+                    }
+                }
+            });
+            
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('.prompt').style.color = 'var(--accent)';
+            });
+            
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('.prompt').style.color = '';
+            });
+        });
+
+        // Contact Form Submit
+        function handleSubmit(e) {
+            e.preventDefault();
+            const form = document.getElementById('contact-form');
+            const successMsg = document.getElementById('success-msg');
+            
+            form.style.opacity = '0.3';
+            form.style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+                successMsg.classList.add('visible');
+            }, 300);
+        }
+
+        // Add subtle random glitch effect to terminal
+        setInterval(() => {
+            if (Math.random() > 0.95) {
+                document.body.style.transform = `translateX(${Math.random() * 2 - 1}px)`;
+                setTimeout(() => {
+                    document.body.style.transform = '';
+                }, 50);
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+E-commerce Fashion Store Landing Page — Luxury Beige
+CATEGORY
+E-commerce / Fashion Retail
+DESIGN STYLE
+Luxury editorial, warm alabaster palette, serif typography, grayscale images with slow color reveal, gold
+accents
+Overview
+Build a luxury fashion landing page for ‘Maison Eclat, a high-end clothing brand. The palette is warm
+alabaster (#F9F8F6) with charcoal (#1A1A1A) text and metallic gold (#D4AF37) used only as a hover
+accent. All images default to grayscale and slowly reveal full color on hover (1500ms transition). The
+layout uses intentional asymmetry — 7/5 column splits, offset content, bottom-left alignment. The
+design should feel like browsing Chanel or Hermes online — serene, expensive, and deliberate.
+Design Tokens
+
+Background #F9F8F6 — Warm alabaster, like expensive paper
+
+Foreground #1A1A1A — Rich charcoal, not pure black
+
+Muted BG #EBESDE — Pale taupe for alt surfaces
+
+Muted text #6C6863 — Warm grey for secondary copy
+
+Accent #D4AF37 — Metallic gold, hover/focus only
+
+Typography Playfair Display headers, Inter UI, italic serif placeholders
+
+Radius Opx everywhere
+
+Animations 500-2000ms, ease-out, cinematic
+
+Page Sections
+1. Navigation
+~ Logo: MAISON ECLAT in small caps, wide tracking JetBrains Mono
+~ Center nav: Women / Men / Collections / About in Inter medium, tur gold on hover (500ms)
+~ Right: Search icon + Bag icon with item count — thin stroke lucide icons
+~ Border-bottom: 1px #1A1A1A at 10% opacity
+2. Hero — Split Asymmetric
+~ 7-col image left / 5-col content right using CSS grid grid-cols-12
+~ Left: Full-height portrait image (aspect 3/4), grayscale, no color reveal in hero (stays grey for editorial
+effect), subtle inner border shadow
+~ Right content aligned to bottom of the image using flexbox end
+~ Overline: NEW COLLECTION" uppercase, 0.3em tracking, xs, gold
+~ HL: "The Art of Wearing Nothing Extra’ — 72px Playfair Display, line-height 0.9, tight
+~ Body: 18px Inter, warm grey, max-w-sm
+~ CTA: ‘Explore Collection —' — underfine-only button that turns gold on hover
+~ Framer Motion: image slides in from left (x-60 0), content from right, staggered
+3. Featured Products
+
+— 3-column grid. Each card: portrait image (grayscale — color on hover, 1500ms), product name in Playfair,
+price in mono, "Add to Cart’ text link
+— Hover state: image gains color, card bottom border tums gold, subtle shadow deepens
+— Use CSS group hover: parent group, child grayscale-0 on group-hover
+4. Brand Story — Dark Inverted Section
+— Black background (¥1A1A1A), alabaster text
+~ Two columns: Left large italic Playfair quote 48px / Right: body text + vertical decorative line on left of
+paragraph
+— Vertical text label ‘OUR STORY" rotated -30deg, positioned left edge — CSS writing-mode: vertical
+~ Framer Motion: reveal via ciipPath from top as user scrolls
+5. Lookbook — Masonry Grid
+— CSS columns-3 masonry layout, gap-4
+— 8 images of varying heights, all grayscale, color reveal on hover
+~ Hovering one image dims others to 50% opacity — Framer Motion group interaction
+6. Testimonials
+— 3 cards horizontal, each with left gold border (4p) that appears on hover
+— Avatar grayscale — color on card hover
+— Star rating row scales up siightly on hover
+~ Quote in Playfair italic, name in Inter smal, role in mono xs
+7. Newsletter CTA
+~ Centered, minimal: Join the Inner Circle’ h2, tagline, email input + submit
+~ Input: bottom border only, italic serif placeholder
+— Button: primary dark with gold siide-in from left on hover
+8. Footer
+~ 4 columns, thin top border, small sans-serif links, "MAISON ECLAT © 2025' in mono
+
+
