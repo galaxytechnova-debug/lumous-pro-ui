@@ -28,9 +28,10 @@ export default function WaitlistPage() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [countdown, setCountdown] = useState(() => getCountdownParts(OFFER_END_AT));
+  const [countdown, setCountdown] = useState<ReturnType<typeof getCountdownParts> | null>(null);
 
   useEffect(() => {
+    setCountdown(getCountdownParts(OFFER_END_AT));
     const timer = window.setInterval(() => {
       setCountdown(getCountdownParts(OFFER_END_AT));
     }, 1000);
@@ -82,13 +83,15 @@ export default function WaitlistPage() {
               <span className="text-amber-300 font-medium">$175 lifetime</span>.
             </p>
             <div className="mt-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-100">
-              {countdown.expired ? (
+              {countdown?.expired ? (
                 <span>The early access offer window has ended.</span>
               ) : (
                 <span>
                   Offer ends on <span className="font-semibold">27 April 2026</span>. Time left:{" "}
                   <span className="font-semibold">
-                    {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+                    {countdown
+                      ? `${countdown.days}d ${countdown.hours}h ${countdown.minutes}m ${countdown.seconds}s`
+                      : "--d --h --m --s"}
                   </span>
                   .
                 </span>
