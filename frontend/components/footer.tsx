@@ -106,16 +106,9 @@ export function Footer() {
         }}
       >
         <DialogContent className="border-white/10 bg-zinc-950 text-white sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Access code</DialogTitle>
-            <DialogDescription className="text-zinc-400">
-              Enter the password to enable template management on the Templates page.
-            </DialogDescription>
+          <DialogHeader>        
           </DialogHeader>
           <div className="grid gap-2 py-2">
-            <label htmlFor="templates-gate-password" className="text-xs font-medium text-zinc-400">
-              Password
-            </label>
             <Input
               id="templates-gate-password"
               type="password"
@@ -129,7 +122,6 @@ export function Footer() {
                 if (e.key === "Enter") submitGate();
               }}
               className="border-white/10 bg-black/40 text-white placeholder:text-zinc-600"
-              placeholder="Password"
             />
             {gateError ? <p className="text-xs text-red-400">{gateError}</p> : null}
           </div>
