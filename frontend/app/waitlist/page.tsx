@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -8,12 +8,34 @@ import { Sparkles, Layers3, Rocket, Wand2, CheckCircle2, Loader2 } from "lucide-
 import { submitWaitlist } from "@/lib/waitlist-api";
 import { trackWaitlistSubmitted } from "@/lib/analytics";
 
+const OFFER_END_AT = new Date("2026-04-27T23:59:59+05:30").getTime();
+
+function getCountdownParts(targetMs: number) {
+  const diff = Math.max(0, targetMs - Date.now());
+  const totalSeconds = Math.floor(diff / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const expired = diff <= 0;
+
+  return { days, hours, minutes, seconds, expired };
+}
+
 export default function WaitlistPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [countdown, setCountdown] = useState(() => getCountdownParts(OFFER_END_AT));
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setCountdown(getCountdownParts(OFFER_END_AT));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,8 +81,25 @@ export default function WaitlistPage() {
               users get <span className="text-sky-300 font-medium">$45 lifetime access</span>. Then pricing moves to{" "}
               <span className="text-amber-300 font-medium">$175 lifetime</span>.
             </p>
+            <div className="mt-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-100">
+              {countdown.expired ? (
+                <span>The early access offer window has ended.</span>
+              ) : (
+                <span>
+                  Offer ends on <span className="font-semibold">27 April 2026</span>. Time left:{" "}
+                  <span className="font-semibold">
+                    {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+                  </span>
+                  .
+                </span>
+              )}
+            </div>
             <p className="mt-2 text-sm text-zinc-300">
               On <span className="font-medium text-indigo-300">12 May 2026</span>, we are publishing detailed prompts to help you build complete websites with the polished, production-grade UI feel of work crafted by an experienced developer. This will be available only to Pro users, so join the waitlist to get access.
+            </p>
+            <p className="mt-2 text-sm text-zinc-300">
+              Join now to lock in the lowest price, and share this with your colleagues and friends so they can also
+              get Pro access at a much lower cost before the deadline.
             </p>
           </div>
 
